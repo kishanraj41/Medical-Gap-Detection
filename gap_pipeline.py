@@ -70,67 +70,266 @@ LOINC_ICD10_MAP = {
 # ══════════════════════════════════════════════════════════
 
 PHENOTYPE_RULES = {
+    # ── Source: ADA 2024 + PheKB Algorithm 41 ──
     "diabetes_t2": {
         "condition": "Type 2 Diabetes Mellitus",
         "icd10": "E11.9",
-        "medication_markers": ["metformin", "glipizide", "glyburide", "insulin", "sitagliptin", "empagliflozin", "dulaglutide", "semaglutide"],
+        "medication_markers": [
+            "metformin", "insulin", "glipizide", "glyburide", "glimepiride", "sitagliptin",
+            "empagliflozin", "dapagliflozin", "canagliflozin", "liraglutide", "semaglutide",
+            "dulaglutide", "pioglitazone", "saxagliptin", "linagliptin", "jardiance", "farxiga",
+            "invokana", "januvia", "actos", "amaryl", "glucophage", "ozempic", "trulicity",
+        ],
         "lab_markers": {"4548-4": {"op": ">=", "value": 6.5}},
-        "note_patterns": [r"(?i)diabetes\s*(mellitus)?(\s*type\s*2)?", r"(?i)\bT2DM\b", r"(?i)\bDM2\b", r"(?i)uncontrolled\s+diabetes"],
+        "note_patterns": [
+            r"(?i)diabetes\s*(mellitus)?(\s*type\s*(2|ii))?", r"(?i)\bT2DM\b", r"(?i)\bDM2?\b",
+            r"(?i)uncontrolled\s+diabetes", r"(?i)\bNIDDM\b", r"(?i)\ba1c\b", r"(?i)\bhba1c\b",
+        ],
     },
+    # ── Source: KDIGO 2024 + PheKB Algorithm 27 ──
     "ckd": {
         "condition": "Chronic Kidney Disease",
         "icd10": "N18.9",
-        "medication_markers": ["lisinopril", "losartan", "amlodipine"],
+        "medication_markers": [
+            "lisinopril", "losartan", "valsartan", "enalapril", "ramipril", "irbesartan",
+            "benazepril", "candesartan", "telmisartan", "olmesartan", "amlodipine",
+        ],
         "lab_markers": {"33914-3": {"op": "<", "value": 60}},
-        "note_patterns": [r"(?i)chronic\s+kidney\s+disease", r"(?i)\bCKD\b", r"(?i)renal\s+(insufficiency|failure)"],
+        "note_patterns": [
+            r"(?i)chronic\s+kidney\s+disease", r"(?i)\bCKD\b", r"(?i)renal\s+(insufficiency|failure|disease)",
+            r"(?i)nephropathy", r"(?i)dialysis", r"(?i)egfr\s*(declined|low|reduced)",
+        ],
     },
-    "copd": {
-        "condition": "COPD",
-        "icd10": "J44.1",
-        "medication_markers": ["albuterol", "tiotropium", "fluticasone", "budesonide", "ipratropium"],
-        "lab_markers": {},
-        "note_patterns": [r"(?i)\bCOPD\b", r"(?i)chronic\s+obstructive", r"(?i)emphysema"],
-    },
+    # ── Source: AHA/ACC 2023 + OMOP Phenotype 218 ──
     "heart_failure": {
         "condition": "Heart Failure",
         "icd10": "I50.9",
-        "medication_markers": ["furosemide", "carvedilol", "metoprolol", "lisinopril", "spironolactone", "sacubitril"],
-        "lab_markers": {"42637-9": {"op": ">", "value": 400}},
-        "note_patterns": [r"(?i)heart\s+failure", r"(?i)\bCHF\b", r"(?i)\bHFrEF\b", r"(?i)\bHFpEF\b"],
+        "medication_markers": [
+            "furosemide", "bumetanide", "torsemide", "spironolactone", "eplerenone",
+            "carvedilol", "metoprolol", "bisoprolol", "sacubitril", "entresto",
+            "digoxin", "hydralazine", "isosorbide", "lasix",
+        ],
+        "lab_markers": {"42637-9": {"op": ">", "value": 100}},
+        "note_patterns": [
+            r"(?i)heart\s+failure", r"(?i)\bCHF\b", r"(?i)\bHF\b", r"(?i)congestive",
+            r"(?i)ejection\s+fraction", r"(?i)\bHFrEF\b", r"(?i)\bHFpEF\b",
+            r"(?i)systolic\s+dysfunction", r"(?i)cardiomyopathy", r"(?i)\bBNP\b",
+        ],
     },
-    "hypertension": {
-        "condition": "Essential Hypertension",
-        "icd10": "I10",
-        "medication_markers": ["lisinopril", "amlodipine", "losartan", "hydrochlorothiazide", "metoprolol", "valsartan"],
+    # ── Source: GOLD 2024 + PheKB Algorithm 7 ──
+    "copd": {
+        "condition": "COPD",
+        "icd10": "J44.1",
+        "medication_markers": [
+            "albuterol", "ipratropium", "tiotropium", "fluticasone", "budesonide",
+            "formoterol", "salmeterol", "umeclidinium", "vilanterol", "roflumilast",
+            "spiriva", "advair", "symbicort", "breo", "trelegy", "proair", "ventolin",
+        ],
         "lab_markers": {},
-        "note_patterns": [r"(?i)hypertension", r"(?i)\bHTN\b", r"(?i)high\s+blood\s+pressure", r"(?i)elevated\s+BP"],
+        "note_patterns": [
+            r"(?i)\bCOPD\b", r"(?i)chronic\s+obstructive", r"(?i)emphysema",
+            r"(?i)chronic\s+bronchitis", r"(?i)bronchodilator", r"(?i)oxygen\s+therapy",
+        ],
     },
-    "hyperlipidemia": {
-        "condition": "Hyperlipidemia",
-        "icd10": "E78.5",
-        "medication_markers": ["atorvastatin", "rosuvastatin", "simvastatin", "pravastatin", "ezetimibe"],
-        "lab_markers": {"2093-3": {"op": ">=", "value": 240}},
-        "note_patterns": [r"(?i)hyperlipidemia", r"(?i)hypercholesterolemia", r"(?i)dyslipidemia", r"(?i)high\s+cholesterol"],
-    },
-    "depression": {
-        "condition": "Major Depressive Disorder",
-        "icd10": "F32.9",
-        "medication_markers": ["sertraline", "fluoxetine", "escitalopram", "citalopram", "duloxetine", "venlafaxine", "bupropion"],
-        "lab_markers": {},
-        "note_patterns": [r"(?i)major\s+depress", r"(?i)\bMDD\b", r"(?i)depressive\s+disorder"],
-    },
+    # ── Source: ATA 2024 ──
     "hypothyroid": {
         "condition": "Hypothyroidism",
         "icd10": "E03.9",
-        "medication_markers": ["levothyroxine", "synthroid", "armour thyroid"],
+        "medication_markers": [
+            "levothyroxine", "synthroid", "armour thyroid", "liothyronine",
+            "tirosint", "levoxyl", "cytomel", "euthyrox", "unithroid",
+        ],
         "lab_markers": {"3016-3": {"op": ">", "value": 4.5}},
-        "note_patterns": [r"(?i)hypothyroid", r"(?i)underactive\s+thyroid"],
+        "note_patterns": [
+            r"(?i)hypothyroid", r"(?i)underactive\s+thyroid", r"(?i)hashimoto",
+            r"(?i)tsh\s*(elevated|high)", r"(?i)myxedema",
+        ],
+    },
+    # ── Source: ATP-III/AHA 2024 ──
+    "hyperlipidemia": {
+        "condition": "Hyperlipidemia",
+        "icd10": "E78.5",
+        "medication_markers": [
+            "atorvastatin", "rosuvastatin", "simvastatin", "pravastatin", "lovastatin",
+            "pitavastatin", "ezetimibe", "fenofibrate", "gemfibrozil", "alirocumab",
+            "evolocumab", "lipitor", "crestor", "zocor", "zetia", "repatha", "praluent",
+        ],
+        "lab_markers": {"2093-3": {"op": ">=", "value": 240}},
+        "note_patterns": [
+            r"(?i)hyperlipidemia", r"(?i)hypercholesterolemia", r"(?i)dyslipidemia",
+            r"(?i)high\s+cholesterol", r"(?i)elevated\s+ldl", r"(?i)\bHLD\b",
+        ],
+    },
+    # ── Source: AHA/ACC 2024 ──
+    "hypertension": {
+        "condition": "Essential Hypertension",
+        "icd10": "I10",
+        "medication_markers": [
+            "lisinopril", "amlodipine", "losartan", "metoprolol", "hydrochlorothiazide",
+            "atenolol", "valsartan", "carvedilol", "diltiazem", "nifedipine",
+            "benazepril", "enalapril", "ramipril", "irbesartan", "clonidine",
+            "hctz", "norvasc", "diovan", "cozaar", "toprol",
+        ],
+        "lab_markers": {},
+        "note_patterns": [
+            r"(?i)hypertension", r"(?i)\bHTN\b", r"(?i)high\s+blood\s+pressure",
+            r"(?i)bp\s*(elevated|high)", r"(?i)hypertensive",
+        ],
+    },
+    # ── Source: WHO + OMOP Phenotype 37 ──
+    "anemia": {
+        "condition": "Anemia",
+        "icd10": "D64.9",
+        "medication_markers": [
+            "ferrous sulfate", "iron", "epoetin", "darbepoetin", "folic acid",
+            "cyanocobalamin", "b12", "vitamin b12",
+        ],
+        "lab_markers": {"718-7": {"op": "<", "value": 12.0}},
+        "note_patterns": [
+            r"(?i)\banemia\b", r"(?i)anemic", r"(?i)low\s+hemoglobin",
+            r"(?i)iron\s+deficiency", r"(?i)b12\s+deficiency",
+        ],
+    },
+    # ── Source: APA 2024 + PheKB Algorithm 15 ──
+    "depression": {
+        "condition": "Major Depressive Disorder",
+        "icd10": "F32.9",
+        "medication_markers": [
+            "sertraline", "fluoxetine", "escitalopram", "citalopram", "paroxetine",
+            "venlafaxine", "duloxetine", "bupropion", "mirtazapine", "trazodone",
+            "amitriptyline", "nortriptyline", "lexapro", "zoloft", "prozac",
+            "cymbalta", "effexor", "wellbutrin",
+        ],
+        "lab_markers": {},
+        "note_patterns": [
+            r"(?i)major\s+depress", r"(?i)\bMDD\b", r"(?i)depressive\s+disorder",
+            r"(?i)\bdepressed\b", r"(?i)phq-?9",
+        ],
+    },
+    # ── Source: CMS + OMOP ──
+    "obesity": {
+        "condition": "Obesity",
+        "icd10": "E66.9",
+        "medication_markers": [
+            "orlistat", "phentermine", "liraglutide", "semaglutide", "naltrexone",
+            "contrave", "qsymia", "saxenda", "wegovy",
+        ],
+        "lab_markers": {},
+        "note_patterns": [
+            r"(?i)\bobesity\b", r"(?i)\bobese\b", r"(?i)morbid\s+obes",
+            r"(?i)bmi\s*(>|over|of)\s*(30|35|40)", r"(?i)bariatric",
+        ],
+    },
+    # ── Source: ACG 2024 ──
+    "gerd": {
+        "condition": "GERD",
+        "icd10": "K21.0",
+        "medication_markers": [
+            "omeprazole", "pantoprazole", "esomeprazole", "lansoprazole",
+            "rabeprazole", "famotidine", "prilosec", "nexium", "protonix", "dexilant",
+        ],
+        "lab_markers": {},
+        "note_patterns": [
+            r"(?i)\bGERD\b", r"(?i)gastroesophageal\s+reflux", r"(?i)acid\s+reflux",
+            r"(?i)heartburn", r"(?i)esophagitis",
+        ],
+    },
+    # ── Source: AASLD 2024 ──
+    "liver_disease": {
+        "condition": "Liver Disease",
+        "icd10": "K76.89",
+        "medication_markers": [
+            "ursodiol", "lactulose", "rifaximin", "spironolactone", "nadolol", "propranolol",
+        ],
+        "lab_markers": {"1742-6": {"op": ">=", "value": 100}},
+        "note_patterns": [
+            r"(?i)cirrhosis", r"(?i)hepatitis", r"(?i)fatty\s+liver",
+            r"(?i)\bNAFLD\b", r"(?i)\bNASH\b", r"(?i)liver\s+disease",
+            r"(?i)hepatomegaly", r"(?i)ascites",
+        ],
     },
 }
 
 # ══════════════════════════════════════════════════════════
-# NEGATION PATTERNS
+# HCC MAPPING + RAF SCORE (CMS V28 Model)
+# Source: CMS.gov 2025 risk adjustment model
 # ══════════════════════════════════════════════════════════
+
+CMS_BASE_RATE = 11_000  # Approximate CMS per-member base rate for 2026
+
+HCC_ICD10_MAP = {
+    # Diabetes
+    "E11": {"hcc": "HCC 37", "desc": "Diabetes without Complication", "raf": 0.166},
+    "E11.2": {"hcc": "HCC 18", "desc": "Diabetes with Chronic Complications", "raf": 0.302},
+    "E11.4": {"hcc": "HCC 18", "desc": "Diabetes with Neurological Complications", "raf": 0.302},
+    "E11.6": {"hcc": "HCC 18", "desc": "Diabetes with Other Complications", "raf": 0.302},
+    "E11.65": {"hcc": "HCC 37", "desc": "DM2 with Hyperglycemia", "raf": 0.166},
+    # CKD
+    "N18.3": {"hcc": "HCC 138", "desc": "CKD Stage 3", "raf": 0.069},
+    "N18.4": {"hcc": "HCC 137", "desc": "CKD Stage 4", "raf": 0.289},
+    "N18.5": {"hcc": "HCC 136", "desc": "CKD Stage 5", "raf": 0.289},
+    "N18.9": {"hcc": "HCC 138", "desc": "CKD Unspecified", "raf": 0.069},
+    # Heart Failure
+    "I50.2": {"hcc": "HCC 85", "desc": "Systolic Heart Failure", "raf": 0.323},
+    "I50.3": {"hcc": "HCC 85", "desc": "Diastolic Heart Failure", "raf": 0.323},
+    "I50.9": {"hcc": "HCC 85", "desc": "Heart Failure Unspecified", "raf": 0.323},
+    # COPD
+    "J44.0": {"hcc": "HCC 111", "desc": "COPD with Acute Exacerbation", "raf": 0.335},
+    "J44.1": {"hcc": "HCC 111", "desc": "COPD with Chronic Bronchitis", "raf": 0.335},
+    # Hypertension (not HCC in V28 — but still revenue relevant)
+    "I10": {"hcc": "Non-HCC", "desc": "Essential Hypertension", "raf": 0.0},
+    # Hyperlipidemia (not HCC)
+    "E78.0": {"hcc": "Non-HCC", "desc": "Pure Hypercholesterolemia", "raf": 0.0},
+    "E78.5": {"hcc": "Non-HCC", "desc": "Hyperlipidemia", "raf": 0.0},
+    # Depression
+    "F32.9": {"hcc": "HCC 155", "desc": "Major Depression", "raf": 0.309},
+    "F33.0": {"hcc": "HCC 155", "desc": "Recurrent Depression", "raf": 0.309},
+    # Hypothyroid (not HCC)
+    "E03.9": {"hcc": "Non-HCC", "desc": "Hypothyroidism", "raf": 0.0},
+    # Anemia
+    "D64.9": {"hcc": "Non-HCC", "desc": "Anemia Unspecified", "raf": 0.0},
+    "D50.9": {"hcc": "HCC 48", "desc": "Iron Deficiency Anemia", "raf": 0.0},
+    # Obesity
+    "E66.01": {"hcc": "Non-HCC", "desc": "Morbid Obesity", "raf": 0.0},
+    "E66.9": {"hcc": "Non-HCC", "desc": "Obesity", "raf": 0.0},
+    # GERD (not HCC)
+    "K21.0": {"hcc": "Non-HCC", "desc": "GERD with Esophagitis", "raf": 0.0},
+    # Liver
+    "K76.89": {"hcc": "Non-HCC", "desc": "Other Liver Disease", "raf": 0.0},
+    "K70.3": {"hcc": "HCC 28", "desc": "Alcoholic Cirrhosis", "raf": 0.390},
+    # Sleep Apnea
+    "G47.33": {"hcc": "Non-HCC", "desc": "Obstructive Sleep Apnea", "raf": 0.0},
+    # Anxiety
+    "F41.1": {"hcc": "Non-HCC", "desc": "Generalized Anxiety", "raf": 0.0},
+    # Asthma
+    "J45.20": {"hcc": "HCC 111", "desc": "Mild Asthma", "raf": 0.335},
+}
+
+
+def lookup_hcc(icd10: str) -> dict:
+    """Lookup HCC category and RAF value for an ICD-10 code.
+    Tries exact match, then progressive prefix (E11.65 → E11.6 → E11)."""
+    if not icd10:
+        return {"hcc": "Unknown", "desc": "", "raf": 0.0, "revenue_impact": 0.0}
+
+    code = icd10.strip().upper()
+
+    # Exact match
+    if code in HCC_ICD10_MAP:
+        entry = HCC_ICD10_MAP[code]
+        return {**entry, "revenue_impact": round(entry["raf"] * CMS_BASE_RATE, 2)}
+
+    # Progressive prefix: E11.65 → E11.6 → E11
+    for length in range(len(code) - 1, 2, -1):
+        prefix = code[:length]
+        if prefix in HCC_ICD10_MAP:
+            entry = HCC_ICD10_MAP[prefix]
+            return {**entry, "revenue_impact": round(entry["raf"] * CMS_BASE_RATE, 2)}
+
+    return {"hcc": "Non-HCC", "desc": "", "raf": 0.0, "revenue_impact": 0.0}
+
+
+
 
 NEGATION_CUES = [
     r"(?i)\bno\s+(evidence|history|sign|diagnosis)\s+of\b",
@@ -247,8 +446,14 @@ def run_gap_pipeline(profile: Dict, demographics: Dict) -> Dict:
     deduped = _deduplicate(candidates)
     log.info(f"After dedup: {len(deduped)} unique candidates")
 
-    # ── MEAT Validation ──
+    # ── HCC + RAF Scoring ──
+    total_revenue_impact = 0.0
     for gap in deduped:
+        hcc_info = lookup_hcc(gap.get("icd10_code", ""))
+        gap["hcc_category"] = hcc_info["hcc"]
+        gap["hcc_description"] = hcc_info["desc"]
+        gap["raf_value"] = hcc_info["raf"]
+        gap["annual_revenue_impact"] = hcc_info["revenue_impact"]
         gap["meat_evidence"] = _assess_meat(gap, profile)
 
     # ── Decision ──
@@ -274,12 +479,24 @@ def run_gap_pipeline(profile: Dict, demographics: Dict) -> Dict:
             gap["confidence_score"] = 0.2
             rejected.append(gap)
 
-    log.info(f"Pipeline complete: {len(approved)} approved, {len(review)} review, {len(rejected)} rejected")
+    # Sort approved by revenue impact (highest first)
+    approved.sort(key=lambda g: g.get("annual_revenue_impact", 0), reverse=True)
+
+    total_revenue = sum(g.get("annual_revenue_impact", 0) for g in approved)
+    total_revenue_review = sum(g.get("annual_revenue_impact", 0) for g in review)
+
+    log.info(f"Pipeline complete: {len(approved)} approved (${total_revenue:,.0f}/yr), "
+             f"{len(review)} review (${total_revenue_review:,.0f}/yr), {len(rejected)} rejected")
 
     return {
         "approved": approved,
         "review": review,
         "rejected": rejected,
+        "revenue_summary": {
+            "approved_annual_impact": round(total_revenue, 2),
+            "review_annual_impact": round(total_revenue_review, 2),
+            "total_potential_impact": round(total_revenue + total_revenue_review, 2),
+        },
     }
 
 

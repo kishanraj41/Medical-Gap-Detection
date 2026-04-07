@@ -103,3 +103,7 @@ Python · FastAPI · FHIR R4 · SHARP-on-MCP · LOINC · ICD-10-CM · PheKB · H
 ## License
 
 MIT
+
+## Hackathon
+
+Built for [Agents Assemble 2026](https://agents-assemble.devpost.com/) — Prompt Opinion Healthcare AI Hackathon.

@@ -326,6 +326,7 @@ async def tool_detect_gaps(extractor, arguments: dict, ctx: dict) -> dict:
             "total_labs_checked": len(profile.get("observations", [])),
             "coded_conditions": len(profile.get("conditions", [])),
         },
+        "revenue_impact": result.get("revenue_summary", {}),
         "approved_gaps": result.get("approved", []),
         "review_candidates": result.get("review", []),
     }
