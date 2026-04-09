@@ -55,6 +55,12 @@ def validate_sharp_context(ctx: dict):
 # ══════════════════════════════════════════════════════════
 
 @app.post("/mcp")
+async def mcp_info():
+	"""Return OK for GET """
+	return {
+		"jsonrpc":"2.0",
+		"status":"OK"
+		}
 async def mcp_endpoint(request: Request):
     """Main MCP endpoint — handles initialize, tools/list, tools/call."""
     body = await request.json()
