@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy only the mock FHIR server
+COPY mock_fhir_server.py .
+
+# Expose port 8080
+EXPOSE 8080
+
+# Run the mock FHIR server
+CMD ["python", "mock_fhir_server.py"]
