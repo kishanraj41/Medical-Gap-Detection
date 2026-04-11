@@ -1,0 +1,88 @@
+LOINC,TEST_NAME,REF_LOW,REF_HIGH,UNIT,REF_LOW_F,REF_HIGH_F,SOURCE,CONDITION_HIGH,CONDITION_LOW,DIAG_THRESHOLD,DIAG_OPERATOR,DIAG_CONDITION,INTERPRETATION_HIGH,INTERPRETATION_LOW
+4548-4,Hemoglobin A1c,4.0,5.6,%,,,ADA,Diabetes Mellitus,,6.5,>=,Diabetes Mellitus,Hyperglycemia,
+17856-6,Hemoglobin A1c (DCCT),4.0,5.6,%,,,ADA,Diabetes Mellitus,,6.5,>=,Diabetes Mellitus,Hyperglycemia,
+2345-7,Glucose (random),70,140,mg/dL,,,ADA,Diabetes Mellitus,Hypoglycemia,200,>=,Diabetes Mellitus,Hyperglycemia,Hypoglycemia
+1558-6,Glucose (fasting),70,100,mg/dL,,,ADA,Diabetes Mellitus,Hypoglycemia,126,>=,Diabetes Mellitus,Hyperglycemia,Hypoglycemia
+14749-6,Glucose (fasting mmol/L),3.9,5.6,mmol/L,,,ADA,Diabetes Mellitus,Hypoglycemia,7.0,>=,Diabetes Mellitus,Hyperglycemia,Hypoglycemia
+2339-0,Glucose (blood),70,140,mg/dL,,,ADA,Diabetes Mellitus,Hypoglycemia,200,>=,Diabetes Mellitus,Hyperglycemia,Hypoglycemia
+14771-0,Glucose (fasting plasma mmol/L),3.9,5.6,mmol/L,,,ADA,Diabetes Mellitus,,7.0,>=,Diabetes Mellitus,Hyperglycemia,
+33914-3,eGFR,60,999,mL/min/1.73m2,,,KDIGO,CKD,CKD,60,<,CKD Stage 3+,Decreased kidney function,Decreased kidney function
+48642-3,eGFR (non-AA),60,999,mL/min/1.73m2,,,KDIGO,CKD,CKD,60,<,CKD Stage 3+,Decreased kidney function,Decreased kidney function
+48643-1,eGFR (AA),60,999,mL/min/1.73m2,,,KDIGO,CKD,CKD,60,<,CKD Stage 3+,Decreased kidney function,Decreased kidney function
+62238-1,eGFR (CKD-EPI),60,999,mL/min/1.73m2,,,KDIGO,CKD,CKD,60,<,CKD Stage 3+,Decreased kidney function,Decreased kidney function
+69405-9,eGFR (CKD-EPI 2021),60,999,mL/min/1.73m2,,,KDIGO,CKD,CKD,60,<,CKD Stage 3+,Decreased kidney function,Decreased kidney function
+2160-0,Creatinine,0.7,1.3,mg/dL,0.5,1.1,Clinical,CKD,,1.5,>=,CKD suspected,Elevated creatinine,
+14682-9,Creatinine (umol/L),62,115,umol/L,44,97,Clinical,CKD,,133,>=,CKD suspected,Elevated creatinine,
+3094-0,BUN,6,24,mg/dL,,,Clinical,CKD/Dehydration,,40,>=,CKD/Dehydration,Elevated BUN,
+9318-7,Albumin/Creatinine Ratio,0,30,mg/g,,,KDIGO,Diabetic Nephropathy,,30,>=,Microalbuminuria,Albuminuria,
+14959-1,Microalbumin (urine),0,30,mg/L,,,KDIGO,Diabetic Nephropathy,,30,>=,Microalbuminuria,Albuminuria,
+2093-3,Total Cholesterol,0,200,mg/dL,,,ATP-III,Hyperlipidemia,,240,>=,Hypercholesterolemia,High cholesterol,
+2089-1,LDL Cholesterol,0,100,mg/dL,,,ATP-III,Hyperlipidemia,,160,>=,High LDL,High LDL cholesterol,
+2085-9,HDL Cholesterol,40,999,mg/dL,50,999,AHA,Cardiovascular Risk,Low HDL,40,<,Low HDL,Low HDL cholesterol,Low HDL cholesterol
+2571-8,Triglycerides,0,150,mg/dL,,,ATP-III,Hypertriglyceridemia,,200,>=,High Triglycerides,Hypertriglyceridemia,
+13457-7,LDL (calculated),0,100,mg/dL,,,ATP-III,Hyperlipidemia,,160,>=,High LDL,High LDL cholesterol,
+18263-4,Cholesterol/HDL Ratio,0,5,ratio,,,AHA,Cardiovascular Risk,,5,>=,High CV Risk,Elevated ratio,
+3016-3,TSH,0.4,4.0,mIU/L,,,ATA,Hypothyroidism,Hyperthyroidism,10,>=,Hypothyroidism,Elevated TSH,Suppressed TSH
+3024-7,Free T4,0.8,1.8,ng/dL,,,ATA,Hyperthyroidism,Hypothyroidism,,,,,
+3053-6,Total T3,80,200,ng/dL,,,ATA,Hyperthyroidism,Hypothyroidism,,,,,
+14920-3,TSH (3rd gen),0.4,4.0,mIU/L,,,ATA,Hypothyroidism,Hyperthyroidism,10,>=,Hypothyroidism,Elevated TSH,Suppressed TSH
+718-7,Hemoglobin,13.5,17.5,g/dL,12.0,16.0,WHO,Polycythemia,Anemia,10,<,Moderate Anemia,Polycythemia,Anemia
+4544-3,Hematocrit,38.3,48.6,%,35.5,44.9,WHO,Polycythemia,Anemia,30,<,Severe Anemia,Polycythemia,Anemia
+26515-7,Platelet Count,150,400,10*3/uL,,,Clinical,Thrombocytosis,Thrombocytopenia,50,<,Severe Thrombocytopenia,Thrombocytosis,Thrombocytopenia
+6690-2,WBC,4.5,11.0,10*3/uL,,,Clinical,Infection,Leukopenia,20,>=,Severe Leukocytosis,Leukocytosis,Leukopenia
+789-8,RBC,4.5,5.9,10*6/uL,4.1,5.1,Clinical,,Anemia,,,,,
+785-6,MCH,27,31,pg,,,Clinical,,Anemia,,,,,
+786-4,MCHC,32,36,g/dL,,,Clinical,,Anemia,,,,,
+787-2,MCV,80,100,fL,,,Clinical,Macrocytic Anemia,Microcytic Anemia,,,,,
+788-0,RDW,11.5,14.5,%,,,Clinical,Anemia,,,,,,
+2823-3,Potassium,3.5,5.0,mEq/L,,,Clinical,Hyperkalemia,Hypokalemia,6.0,>=,Severe Hyperkalemia,Hyperkalemia,Hypokalemia
+2951-2,Sodium,136,145,mEq/L,,,Clinical,Hypernatremia,Hyponatremia,125,<,Severe Hyponatremia,Hypernatremia,Hyponatremia
+2075-0,Chloride,98,106,mEq/L,,,Clinical,,,,,,,
+17861-6,Calcium,8.5,10.5,mg/dL,,,Clinical,Hypercalcemia,Hypocalcemia,,,,,
+2000-8,Calcium (ionized),4.6,5.3,mg/dL,,,Clinical,Hypercalcemia,Hypocalcemia,,,,,
+2601-3,Magnesium,1.7,2.2,mg/dL,,,Clinical,,Hypomagnesemia,,,,,
+2777-1,Phosphorus,2.5,4.5,mg/dL,,,Clinical,Hyperphosphatemia,,,,,,
+1963-8,Bicarbonate,22,29,mEq/L,,,Clinical,Metabolic Alkalosis,Metabolic Acidosis,,,,,
+2028-9,CO2,22,29,mEq/L,,,Clinical,Metabolic Alkalosis,Metabolic Acidosis,,,,,
+1742-6,ALT,7,33,U/L,7,25,ACG,Liver Disease,,100,>=,Significant liver injury,Elevated ALT,
+1920-8,AST,10,40,U/L,,,Clinical,Liver Disease,,100,>=,Significant liver injury,Elevated AST,
+1975-2,Total Bilirubin,0.1,1.2,mg/dL,,,Clinical,Liver Disease/Jaundice,,3.0,>=,Jaundice,Hyperbilirubinemia,
+1751-7,Alkaline Phosphatase,40,129,U/L,,,Clinical,Liver/Bone Disease,,,,,,
+1968-7,Albumin,3.5,5.0,g/dL,,,Clinical,,Malnutrition/Liver Disease,2.5,<,Severe Hypoalbuminemia,,Hypoalbuminemia
+2532-0,LDH,140,280,U/L,,,Clinical,,,,,,,
+1798-8,Amylase,25,125,U/L,,,Clinical,Pancreatitis,,300,>=,Acute Pancreatitis,Elevated amylase,
+1988-5,CRP,0,3.0,mg/L,,,Clinical,Inflammation,,10,>=,Significant Inflammation,Elevated CRP,
+14631-6,Bilirubin (umol/L),0,20.5,umol/L,,,Clinical,Liver Disease,,,,,,
+30341-2,ESR,0,20,mm/hr,0,30,Clinical,Inflammation,,50,>=,Significant Inflammation,Elevated ESR,
+6301-6,INR,0.8,1.2,ratio,,,Clinical,Bleeding Risk,Clotting Risk,3.0,>=,High Bleeding Risk,Elevated INR,
+5902-2,Prothrombin Time,11,13.5,sec,,,Clinical,Bleeding Risk,,,,,,
+14979-9,aPTT,25,35,sec,,,Clinical,Bleeding Risk,,,,,,
+10839-9,Troponin I,0,0.04,ng/mL,,,Clinical,Myocardial Infarction,,0.04,>=,Myocardial Injury,Elevated Troponin,
+49563-0,Troponin T (hs),0,14,pg/mL,,,Clinical,Myocardial Infarction,,14,>=,Myocardial Injury,Elevated Troponin,
+33762-6,NT-proBNP,0,125,pg/mL,,,Clinical,Heart Failure,,300,>=,Heart Failure likely,Elevated NT-proBNP,
+30934-4,BNP,0,100,pg/mL,,,Clinical,Heart Failure,,100,>=,Heart Failure suspected,Elevated BNP,
+2157-6,CK (CPK),30,200,U/L,,,Clinical,Rhabdomyolysis,,,,,,
+13969-1,CK-MB,0,5,ng/mL,,,Clinical,Myocardial Infarction,,,,,,
+2744-1,pH (arterial),7.35,7.45,,,,Clinical,Alkalosis,Acidosis,,,,,
+2019-8,pCO2 (arterial),35,45,mmHg,,,Clinical,Respiratory Acidosis,Respiratory Alkalosis,,,,,
+2703-7,pO2 (arterial),80,100,mmHg,,,Clinical,,Hypoxemia,60,<,Severe Hypoxemia,,Hypoxemia
+2708-6,O2 Saturation,95,100,%,,,Clinical,,Hypoxemia,90,<,Hypoxemia,,Hypoxemia
+770-8,Neutrophils %,40,70,%,,,Clinical,Infection,Neutropenia,,,,,
+736-9,Lymphocytes %,20,40,%,,,Clinical,Infection,Lymphopenia,,,,,
+742-7,Monocytes %,2,8,%,,,Clinical,,,,,,,
+713-8,Eosinophils %,1,4,%,,,Clinical,Allergy/Parasites,,,,,,
+706-2,Basophils %,0,1,%,,,Clinical,,,,,,,
+14937-7,BUN (mmol/L),2.1,8.5,mmol/L,,,Clinical,CKD,,,,,,
+2885-2,Total Protein,6.0,8.3,g/dL,,,Clinical,,Malnutrition,,,,,
+3084-1,Uric Acid,3.5,7.2,mg/dL,,,Clinical,Gout,,9.0,>=,Gout likely,Hyperuricemia,
+2276-4,Ferritin,20,250,ng/mL,20,200,Clinical,Iron Overload,Iron Deficiency Anemia,12,<,Iron Deficiency,Iron Overload,Iron Deficiency
+2498-4,Iron,60,170,ug/dL,,,Clinical,Iron Overload,Iron Deficiency Anemia,,,,,
+2500-7,Iron Binding Capacity (TIBC),250,370,ug/dL,,,Clinical,,Iron Deficiency,,,,,
+14798-3,Iron Saturation,20,50,%,,,Clinical,Iron Overload,Iron Deficiency,,,,,
+2132-9,Vitamin B12,200,900,pg/mL,,,Clinical,,B12 Deficiency,200,<,B12 Deficiency,Elevated B12,B12 Deficiency
+2284-8,Folate,3.0,20.0,ng/mL,,,Clinical,,Folate Deficiency,,,,,
+1989-3,Vitamin D (25-OH),30,100,ng/mL,,,Clinical,Toxicity,Vitamin D Deficiency,20,<,Vitamin D Deficiency,,Vitamin D Deficiency
+27353-2,Glucose (urine),0,0,mg/dL,,,Clinical,Diabetes,,,,,,
+5792-7,Protein (urine),0,14,mg/dL,,,Clinical,CKD/Nephrotic,,,,,,
+5811-5,Specific Gravity (urine),1.005,1.030,,,,Clinical,,,,,,,
+5803-2,pH (urine),5.0,8.0,,,,Clinical,,,,,,,
