@@ -404,9 +404,13 @@ NEGATION_CUES = [
 ]
 
 SCREENING_PATTERNS = [
-    r"(?i)\bscreening?\b", r"(?i)\breferred?\s+for\b",
+    r"(?i)\bscreening?\s+(for|of)\b", r"(?i)\breferred?\s+for\b",
     r"(?i)\breferral\s+to\b", r"(?i)\brule\s+out\b",
     r"(?i)\bpossible\b", r"(?i)\bsuspect(ed)?\b",
+    r"(?i)\bscreen(ed|ing)?\b",
+    r"(?i)phq-?9\s*(administered|score|completed)",
+    r"(?i)\bno\s+treatment\s+indicated\b",
+    r"(?i)\bnot\s+meeting\s+criteria\b",
 ]
 
 
@@ -637,10 +641,12 @@ def _tier2_phenotype_detection(profile: Dict, coded: set) -> List[Dict]:
 
         evidence = []
 
-        # Check medications
+        # Check medications (deduplicate — same med can't match multiple markers)
+        matched_meds = set()
         for med_marker in rule["medication_markers"]:
             for med_name in med_names:
-                if med_marker.lower() in med_name:
+                if med_marker.lower() in med_name and med_name not in matched_meds:
+                    matched_meds.add(med_name)
                     evidence.append(f"Medication: {med_name} (marker for {rule['condition']})")
                     break
 
@@ -658,12 +664,13 @@ def _tier2_phenotype_detection(profile: Dict, coded: set) -> List[Dict]:
                 except (ValueError, TypeError):
                     pass
 
-        # Check note patterns
+        # Check note patterns (with negation AND screening filtering)
+        note_evidence_found = False
         for pattern in rule.get("note_patterns", []):
             match = re.search(pattern, all_notes)
             if match:
                 pos = match.start()
-                # Check negation
+                # Check negation AND screening
                 if not is_negated(all_notes, pos) and not is_screening(all_notes, pos):
                     section = detect_section(all_notes, pos)
                     if section in ("assessment_plan", "unknown"):
@@ -672,8 +679,10 @@ def _tier2_phenotype_detection(profile: Dict, coded: set) -> List[Dict]:
                         end = min(len(all_notes), pos + 200)
                         snippet = all_notes[start:end].strip()
                         evidence.append(f"Clinical note [{section}]: ...{snippet}...")
+                        note_evidence_found = True
                         break
 
+        # If note evidence was blocked by screening/negation, downgrade medication-only to weak
         if len(evidence) >= 2:
             gaps.append({
                 "tier": "TIER_2_PHENOTYPE",
@@ -684,8 +693,20 @@ def _tier2_phenotype_detection(profile: Dict, coded: set) -> List[Dict]:
                 "phenotype_rule": rule_id,
             })
         elif len(evidence) == 1 and any("Medication" in e for e in evidence):
-            # Single medication evidence — still a review candidate
-            # (e.g., patient on metformin but no lab/note evidence for DM)
+            # Single medication evidence — only if note wasn't blocked by screening
+            # If note WAS blocked by screening, this is likely just maintenance therapy
+            if not note_evidence_found:
+                # Check if any note mention exists at all (even in screening context)
+                any_mention = False
+                for pattern in rule.get("note_patterns", []):
+                    if re.search(pattern, all_notes):
+                        any_mention = True
+                        break
+                # If the condition is mentioned in a screening context, DON'T flag as gap
+                if any_mention:
+                    # Mentioned but in screening context — skip entirely
+                    continue
+
             gaps.append({
                 "tier": "TIER_2_PHENOTYPE_WEAK",
                 "icd10_code": icd10,
