@@ -380,7 +380,7 @@ async def search_resource(resource_type: str, request: Request):
 if __name__ == "__main__":
     import uvicorn
     import os
-    port = int(os.version.get("PORT", 8080)
+    port = int(os.environ.get("PORT", 8080))
     print(f"Mock FHIR R4 Server starting on {port}")
     print("Patients: synth-001 (Maria Rodriguez), synth-002 (James Thompson), synth-003 (Sarah Chen)")
     uvicorn.run(mock_fhir, host="0.0.0.0", port=port)

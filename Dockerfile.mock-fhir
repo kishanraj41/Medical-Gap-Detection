@@ -2,15 +2,15 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only the mock FHIR server
+# Copy the application
 COPY mock_fhir_server.py .
 
-# Expose port 8080
+# Expose port
 EXPOSE 8080
 
-# Run the mock FHIR server
-CMD ["python", "mock_fhir_server.py"]
+# Use exec form and run uvicorn directly
+CMD ["uvicorn", "mock_fhir_server:mock_fhir", "--host", "0.0.0.0", "--port", "8080"]
