@@ -66,7 +66,6 @@ async def mcp_endpoint(request: Request):
     body = await request.json()
     method = body.get("method", "")
     req_id = body.get("id", 1)
-
     if method == "initialize":
         return mcp_response(req_id, {
             "protocolVersion": "2024-11-05",
