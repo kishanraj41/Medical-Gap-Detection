@@ -68,53 +68,53 @@ async def mcp_endpoint(request: Request):
     req_id = body.get("id", 1)
 
     if method == "initialize":
-    return mcp_response(req_id, {
-        "protocolVersion": "2024-11-05",
-        "serverInfo": {
-            "name": "ctrl-alt-heal",
-            "version": "1.0.0",
-        },
-        "capabilities": {
-            "tools": {"listChanged": False},
-            "extensions": {
-                "ai.promptopinion/fhir-context": {
-                    "scopes": [
-                        {
-                            "name": "patient/Patient.rs",
-                            "required": True
-                        },
-                        {
-                            "name": "patient/Observation.rs",
-                            "required": True
-                        },
-                        {
-                            "name": "patient/Condition.rs",
-                            "required": True
-                        },
-                        {
-                            "name": "patient/MedicationRequest.rs",
-                            "required": True
-                        },
-                        {
-                            "name": "patient/DocumentReference.rs",
-                            "required": True
-                        },
-                        {
-                            "name": "patient/Encounter.rs",
-                            "required": False
-                        },
-                        {
-                            "name": "patient/Procedure.rs",
-                            "required": False
-                        }
-                    ]
-                }
+        return mcp_response(req_id, {
+            "protocolVersion": "2024-11-05",
+            "serverInfo": {
+                "name": "ctrl-alt-heal",
+                "version": "1.0.0",
             },
-            "experimental": {
-                "fhir_context_required": {"value": True},
+            "capabilities": {
+                "tools": {"listChanged": False},
+                "extensions": {
+                    "ai.promptopinion/fhir-context": {
+                        "scopes": [
+                            {
+                                "name": "patient/Patient.rs",
+                                "required": True
+                            },
+                            {
+                                "name": "patient/Observation.rs",
+                                "required": True
+                            },
+                            {
+                                "name": "patient/Condition.rs",
+                                "required": True
+                            },
+                            {
+                                "name": "patient/MedicationRequest.rs",
+                                "required": True
+                            },
+                            {
+                                "name": "patient/DocumentReference.rs",
+                                "required": True
+                            },
+                            {
+                                "name": "patient/Encounter.rs",
+                                "required": False
+                            },
+                            {
+                                "name": "patient/Procedure.rs",
+                                "required": False
+                            }
+                        ]
+                    }
+                },
+                "experimental": {
+                    "fhir_context_required": {"value": True},
+                },
             },
-        },
-    })
+        })
     
     elif method == "notifications/initialized":
         return JSONResponse(content={})
