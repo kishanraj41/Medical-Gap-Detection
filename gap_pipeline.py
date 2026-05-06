@@ -17,51 +17,111 @@ log = logging.getLogger("gapdetect.pipeline")
 # ══════════════════════════════════════════════════════════
 
 LOINC_ICD10_MAP = {
-    # HbA1c → Diabetes
+    # ── Diabetes ──
     "4548-4": {"name": "HbA1c", "thresholds": [
         {"op": ">=", "value": 6.5, "icd10": "E11.65", "condition": "Type 2 diabetes with hyperglycemia"},
         {"op": ">=", "value": 5.7, "icd10": "R73.03", "condition": "Prediabetes"},
     ]},
-    # eGFR → CKD
+    "17856-6": {"name": "HbA1c (alternate LOINC)", "thresholds": [
+        {"op": ">=", "value": 6.5, "icd10": "E11.65", "condition": "Type 2 diabetes with hyperglycemia"},
+    ]},
+    "1558-6": {"name": "Fasting Glucose", "thresholds": [
+        {"op": ">=", "value": 126, "icd10": "E11.65", "condition": "Type 2 diabetes with hyperglycemia"},
+        {"op": ">=", "value": 100, "icd10": "R73.09", "condition": "Impaired fasting glucose"},
+    ]},
+    "2345-7": {"name": "Glucose (random)", "thresholds": [
+        {"op": ">=", "value": 200, "icd10": "E11.65", "condition": "Type 2 diabetes with hyperglycemia"},
+    ]},
+    # ── Kidney ──
     "33914-3": {"name": "eGFR", "thresholds": [
         {"op": "<", "value": 15, "icd10": "N18.5", "condition": "CKD Stage 5"},
         {"op": "<", "value": 30, "icd10": "N18.4", "condition": "CKD Stage 4"},
         {"op": "<", "value": 45, "icd10": "N18.3", "condition": "CKD Stage 3b"},
         {"op": "<", "value": 60, "icd10": "N18.3", "condition": "CKD Stage 3"},
     ]},
-    # ALT → Liver
+    "48642-3": {"name": "eGFR (non-Black)", "thresholds": [
+        {"op": "<", "value": 60, "icd10": "N18.3", "condition": "CKD Stage 3"},
+    ]},
+    "62238-1": {"name": "eGFR (CKD-EPI)", "thresholds": [
+        {"op": "<", "value": 60, "icd10": "N18.3", "condition": "CKD Stage 3"},
+    ]},
+    "2160-0": {"name": "Creatinine", "thresholds": [
+        {"op": ">=", "value": 1.5, "icd10": "N18.9", "condition": "CKD, unspecified"},
+    ]},
+    "14959-1": {"name": "Microalbumin/Creatinine Ratio", "thresholds": [
+        {"op": ">=", "value": 300, "icd10": "N18.3", "condition": "CKD Stage 3 (albuminuria A3)"},
+        {"op": ">=", "value": 30, "icd10": "N18.9", "condition": "CKD (albuminuria A2)"},
+    ]},
+    # ── Liver ──
     "1742-6": {"name": "ALT", "thresholds": [
         {"op": ">", "value": 56, "icd10": "K76.89", "condition": "Liver disease, other specified"},
     ]},
-    # Total Cholesterol
+    "1920-8": {"name": "AST", "thresholds": [
+        {"op": ">", "value": 40, "icd10": "K76.89", "condition": "Liver disease, other specified"},
+    ]},
+    "1975-2": {"name": "Bilirubin (total)", "thresholds": [
+        {"op": ">=", "value": 3.0, "icd10": "K76.89", "condition": "Liver disease"},
+    ]},
+    # ── Lipids ──
     "2093-3": {"name": "Total Cholesterol", "thresholds": [
         {"op": ">=", "value": 240, "icd10": "E78.0", "condition": "Pure hypercholesterolemia"},
     ]},
-    # LDL
     "2089-1": {"name": "LDL", "thresholds": [
         {"op": ">=", "value": 190, "icd10": "E78.0", "condition": "Pure hypercholesterolemia"},
+        {"op": ">=", "value": 160, "icd10": "E78.5", "condition": "Hyperlipidemia, unspecified"},
     ]},
-    # Vitamin D
-    "1989-3": {"name": "Vitamin D", "thresholds": [
-        {"op": "<", "value": 20, "icd10": "E55.9", "condition": "Vitamin D deficiency"},
-    ]},
-    # TSH → Thyroid
-    "3016-3": {"name": "TSH", "thresholds": [
-        {"op": ">", "value": 4.5, "icd10": "E03.9", "condition": "Hypothyroidism, unspecified"},
-        {"op": "<", "value": 0.4, "icd10": "E05.90", "condition": "Thyrotoxicosis, unspecified"},
-    ]},
-    # Hemoglobin → Anemia
-    "718-7": {"name": "Hemoglobin", "thresholds": [
-        {"op": "<", "value": 12.0, "icd10": "D64.9", "condition": "Anemia, unspecified"},
-    ]},
-    # Triglycerides
     "2571-8": {"name": "Triglycerides", "thresholds": [
         {"op": ">=", "value": 500, "icd10": "E78.1", "condition": "Pure hypertriglyceridemia"},
         {"op": ">=", "value": 150, "icd10": "E78.5", "condition": "Hyperlipidemia, unspecified"},
     ]},
-    # BNP → Heart failure
+    # ── Vitamins / Minerals ──
+    "1989-3": {"name": "Vitamin D", "thresholds": [
+        {"op": "<", "value": 20, "icd10": "E55.9", "condition": "Vitamin D deficiency"},
+    ]},
+    "2132-9": {"name": "Vitamin B12", "thresholds": [
+        {"op": "<", "value": 200, "icd10": "E53.8", "condition": "Vitamin B12 deficiency"},
+    ]},
+    "2284-8": {"name": "Folate", "thresholds": [
+        {"op": "<", "value": 3.0, "icd10": "E53.8", "condition": "Folate deficiency"},
+    ]},
+    "2498-4": {"name": "Ferritin", "thresholds": [
+        {"op": "<", "value": 12, "icd10": "D50.9", "condition": "Iron deficiency anemia"},
+    ]},
+    # ── Thyroid ──
+    "3016-3": {"name": "TSH", "thresholds": [
+        {"op": ">", "value": 10.0, "icd10": "E03.9", "condition": "Hypothyroidism, unspecified"},
+        {"op": ">", "value": 4.5, "icd10": "E03.9", "condition": "Hypothyroidism, unspecified"},
+        {"op": "<", "value": 0.4, "icd10": "E05.90", "condition": "Thyrotoxicosis, unspecified"},
+    ]},
+    "3024-7": {"name": "Free T4", "thresholds": [
+        {"op": "<", "value": 0.7, "icd10": "E03.9", "condition": "Hypothyroidism"},
+        {"op": ">", "value": 1.8, "icd10": "E05.90", "condition": "Thyrotoxicosis"},
+    ]},
+    # ── Hematology ──
+    "718-7": {"name": "Hemoglobin", "thresholds": [
+        {"op": "<", "value": 12.0, "icd10": "D64.9", "condition": "Anemia, unspecified"},
+    ]},
+    "4544-3": {"name": "Hematocrit", "thresholds": [
+        {"op": "<", "value": 36.0, "icd10": "D64.9", "condition": "Anemia, unspecified"},
+    ]},
+    # ── Cardiac ──
     "42637-9": {"name": "BNP", "thresholds": [
         {"op": ">", "value": 400, "icd10": "I50.9", "condition": "Heart failure, unspecified"},
+        {"op": ">", "value": 100, "icd10": "I50.9", "condition": "Heart failure (possible)"},
+    ]},
+    "33762-6": {"name": "NT-proBNP", "thresholds": [
+        {"op": ">", "value": 900, "icd10": "I50.9", "condition": "Heart failure, unspecified"},
+        {"op": ">", "value": 300, "icd10": "I50.9", "condition": "Heart failure (possible)"},
+    ]},
+    # ── Metabolic ──
+    "3084-1": {"name": "Uric Acid", "thresholds": [
+        {"op": ">", "value": 7.0, "icd10": "E79.0", "condition": "Hyperuricemia"},
+    ]},
+    "2339-0": {"name": "Glucose (urine)", "thresholds": [
+        {"op": ">", "value": 0, "icd10": "R81", "condition": "Glycosuria"},
+    ]},
+    "5811-5": {"name": "Protein (urine)", "thresholds": [
+        {"op": ">", "value": 30, "icd10": "R80.9", "condition": "Proteinuria"},
     ]},
 }
 
@@ -442,6 +502,11 @@ def run_gap_pipeline(profile: Dict, demographics: Dict) -> Dict:
     candidates.extend(tier3_gaps)
     log.info(f"TIER 3: {len(tier3_gaps)} note-based candidates")
 
+    # ── TIER 4: Specificity Upgrades (coded but too vague) ──
+    tier4_upgrades = _detect_specificity_upgrades(profile, all_coded, profile.get("observations", []))
+    candidates.extend(tier4_upgrades)
+    log.info(f"TIER 4: {len(tier4_upgrades)} specificity upgrades")
+
     # ── Deduplication ──
     deduped = _deduplicate(candidates)
     log.info(f"After dedup: {len(deduped)} unique candidates")
@@ -618,6 +683,18 @@ def _tier2_phenotype_detection(profile: Dict, coded: set) -> List[Dict]:
                 "evidence_count": len(evidence),
                 "phenotype_rule": rule_id,
             })
+        elif len(evidence) == 1 and any("Medication" in e for e in evidence):
+            # Single medication evidence — still a review candidate
+            # (e.g., patient on metformin but no lab/note evidence for DM)
+            gaps.append({
+                "tier": "TIER_2_PHENOTYPE_WEAK",
+                "icd10_code": icd10,
+                "condition_name": rule["condition"],
+                "evidence_sources": evidence,
+                "evidence_count": 1,
+                "phenotype_rule": rule_id,
+                "note": "Medication-only evidence — needs clinical review",
+            })
 
     return gaps
 
@@ -629,13 +706,36 @@ def _tier3_note_detection(notes: List[Dict], coded: set) -> List[Dict]:
 
     # Additional patterns not covered by phenotype rules
     extra_patterns = {
-        "E66.01": {"name": "Morbid obesity", "patterns": [r"(?i)morbid\s+obes", r"(?i)\bBMI\s*(>|over)\s*40\b"]},
-        "G47.33": {"name": "Obstructive sleep apnea", "patterns": [r"(?i)obstructive\s+sleep\s+apnea", r"(?i)\bOSA\b"]},
-        "M81.0": {"name": "Osteoporosis", "patterns": [r"(?i)osteoporosis"]},
+        # Musculoskeletal
+        "E66.01": {"name": "Morbid obesity", "patterns": [r"(?i)morbid\s+obes", r"(?i)\bBMI\s*(>|over|of)\s*40\b"]},
+        "E66.09": {"name": "Obesity, other", "patterns": [r"(?i)\bBMI\s*(>|over|of)\s*(30|35)\b"]},
+        "M81.0": {"name": "Osteoporosis", "patterns": [r"(?i)osteoporosis", r"(?i)bone\s+density\s+loss"]},
+        "M17.11": {"name": "Osteoarthritis, right knee", "patterns": [r"(?i)osteoarthritis.{0,20}knee"]},
+        "M54.5": {"name": "Low back pain", "patterns": [r"(?i)low\s+back\s+pain", r"(?i)lumbar\s+(pain|stenosis)"]},
+        # Neurological
+        "G47.33": {"name": "Obstructive sleep apnea", "patterns": [r"(?i)obstructive\s+sleep\s+apnea", r"(?i)\bOSA\b", r"(?i)\bCPAP\b"]},
         "G43.909": {"name": "Migraine", "patterns": [r"(?i)\bmigraine\b"]},
+        "G20": {"name": "Parkinson's disease", "patterns": [r"(?i)parkinson"]},
+        "G30.9": {"name": "Alzheimer's disease", "patterns": [r"(?i)alzheimer"]},
+        "G40.909": {"name": "Epilepsy", "patterns": [r"(?i)\bepilepsy\b", r"(?i)seizure\s+disorder"]},
+        "G62.9": {"name": "Peripheral neuropathy", "patterns": [r"(?i)peripheral\s+neuropathy", r"(?i)neuropathic\s+pain"]},
+        # GI
         "K21.0": {"name": "GERD with esophagitis", "patterns": [r"(?i)\bGERD\b", r"(?i)gastroesophageal\s+reflux"]},
+        "K58.9": {"name": "IBS", "patterns": [r"(?i)\bIBS\b", r"(?i)irritable\s+bowel"]},
+        # Psychiatric
         "F41.1": {"name": "Generalized anxiety disorder", "patterns": [r"(?i)generalized\s+anxiety", r"(?i)\bGAD\b"]},
+        "F43.10": {"name": "PTSD", "patterns": [r"(?i)\bPTSD\b", r"(?i)post.?traumatic\s+stress"]},
+        "F31.9": {"name": "Bipolar disorder", "patterns": [r"(?i)bipolar"]},
+        "F20.9": {"name": "Schizophrenia", "patterns": [r"(?i)schizophrenia"]},
+        # Respiratory
         "J45.20": {"name": "Mild intermittent asthma", "patterns": [r"(?i)\basthma\b"]},
+        # Cardiovascular
+        "I48.91": {"name": "Atrial fibrillation", "patterns": [r"(?i)atrial\s+fibrillation", r"(?i)\bafib\b", r"(?i)\ba-?fib\b"]},
+        "I25.10": {"name": "Coronary artery disease", "patterns": [r"(?i)coronary\s+artery\s+disease", r"(?i)\bCAD\b"]},
+        "I63.9": {"name": "Cerebral infarction", "patterns": [r"(?i)\bCVA\b", r"(?i)\bstroke\b", r"(?i)cerebral\s+infarct"]},
+        # Autoimmune
+        "M05.79": {"name": "Rheumatoid arthritis", "patterns": [r"(?i)rheumatoid\s+arthritis", r"(?i)\bRA\b"]},
+        "M32.9": {"name": "SLE (Lupus)", "patterns": [r"(?i)\blupus\b", r"(?i)\bSLE\b"]},
     }
 
     all_text = " ".join(n.get("text", "") for n in notes)
@@ -669,55 +769,197 @@ def _tier3_note_detection(notes: List[Dict], coded: set) -> List[Dict]:
 
 
 def _deduplicate(candidates: List[Dict]) -> List[Dict]:
-    """Deduplicate by ICD-10 code, keeping the highest evidence count."""
+    """Smart deduplication: merge evidence across tiers for the same condition.
+    TIER 1 finds diabetes from lab + TIER 2 finds it from notes → combined gap with 3+ evidence."""
     by_code = {}
     for gap in candidates:
         code = gap.get("icd10_code", "")
-        if code not in by_code or gap.get("evidence_count", 0) > by_code[code].get("evidence_count", 0):
-            by_code[code] = gap
+        if code in by_code:
+            existing = by_code[code]
+            # Merge evidence sources
+            for ev in gap.get("evidence_sources", []):
+                if ev not in existing["evidence_sources"]:
+                    existing["evidence_sources"].append(ev)
+            existing["evidence_count"] = len(existing["evidence_sources"])
+            # Keep the more specific tier designation
+            if gap.get("tier", "").startswith("TIER_1"):
+                existing["tier"] = gap["tier"]  # Lab evidence is strongest
+            # Merge lab data if available
+            if gap.get("lab_value") and not existing.get("lab_value"):
+                existing["lab_value"] = gap["lab_value"]
+                existing["lab_name"] = gap.get("lab_name", "")
+                existing["lab_loinc"] = gap.get("lab_loinc", "")
+                existing["lab_date"] = gap.get("lab_date", "")
+        else:
+            by_code[code] = gap.copy()
+
+    # Also check for parent/child code conflicts (don't flag both E11.9 and E11.65)
+    codes = list(by_code.keys())
+    to_remove = set()
+    for code in codes:
+        parent = code.split(".")[0] if "." in code else code
+        # If we have a specific code, remove the unspecified parent
+        for other_code in codes:
+            if other_code != code and other_code.startswith(parent) and len(other_code) < len(code):
+                # Other code is less specific — merge its evidence into ours and remove it
+                if other_code in by_code and code in by_code:
+                    for ev in by_code[other_code].get("evidence_sources", []):
+                        if ev not in by_code[code]["evidence_sources"]:
+                            by_code[code]["evidence_sources"].append(ev)
+                    by_code[code]["evidence_count"] = len(by_code[code]["evidence_sources"])
+                    to_remove.add(other_code)
+
+    for code in to_remove:
+        by_code.pop(code, None)
+
     return list(by_code.values())
 
 
-def _assess_meat(gap: Dict, profile: Dict) -> Dict:
-    """Assess MEAT criteria for a gap."""
-    condition = gap.get("condition_name", "").lower()
-    icd10 = gap.get("icd10_code", "")
+def _detect_specificity_upgrades(profile: Dict, coded: set, observations: List[Dict]) -> List[Dict]:
+    """Detect cases where a coded condition should be upgraded to a more specific code.
+    E.g., E11.9 (diabetes unspecified) coded, but HbA1c 8.4% → should be E11.65 (with hyperglycemia)."""
+    upgrades = []
 
-    meat = {
-        "monitoring": False,
-        "evaluation": False,
-        "assessment": False,
-        "treatment": False,
+    UPGRADE_RULES = {
+        # If E11.9 is coded + HbA1c >= 6.5 → upgrade to E11.65
+        "E11.9": [
+            {"lab_loinc": "4548-4", "op": ">=", "value": 6.5,
+             "upgrade_to": "E11.65", "upgrade_name": "Type 2 DM with hyperglycemia",
+             "reason": "HbA1c {value}% indicates hyperglycemia — E11.65 is more specific than E11.9"},
+        ],
+        # If I10 is coded + CKD present → should use I12.9 (hypertensive CKD)
+        "I10": [
+            {"check_coded": "N18", "upgrade_to": "I12.9",
+             "upgrade_name": "Hypertensive CKD",
+             "reason": "Patient has both hypertension (I10) and CKD — combination code I12.9 required per ICD-10 guidelines"},
+        ],
+        # If E11.9 coded + CKD → E11.22 (diabetes with CKD)
+        "E11.9→N18": [
+            {"check_both": ["E11", "N18"], "upgrade_to": "E11.22",
+             "upgrade_name": "Type 2 DM with diabetic CKD",
+             "reason": "Patient has diabetes + CKD — combination code E11.22 required"},
+        ],
     }
 
-    # M — Monitoring: relevant labs ordered
-    for obs in profile.get("observations", []):
-        obs_name = obs.get("name", "").lower()
-        if any(kw in obs_name for kw in condition.split()[:2]):
-            meat["monitoring"] = True
-            break
-    # Also check if lab-based gap
-    if gap.get("tier") == "TIER_1_STRUCTURED":
-        meat["monitoring"] = True
+    obs_by_loinc = {o.get("loinc", ""): o for o in observations}
 
-    # E — Evaluation: encounter exists
+    for coded_code in coded:
+        rules = UPGRADE_RULES.get(coded_code, [])
+        for rule in rules:
+            if "lab_loinc" in rule:
+                obs = obs_by_loinc.get(rule["lab_loinc"])
+                if obs and obs.get("value") is not None:
+                    try:
+                        val = float(obs["value"])
+                        op = rule["op"]
+                        thresh = rule["value"]
+                        matched = (op == ">=" and val >= thresh) or (op == ">" and val > thresh)
+                        if matched and rule["upgrade_to"] not in coded:
+                            upgrades.append({
+                                "tier": "SPECIFICITY_UPGRADE",
+                                "icd10_code": rule["upgrade_to"],
+                                "condition_name": rule["upgrade_name"],
+                                "evidence_sources": [
+                                    f"Specificity upgrade: {coded_code} currently coded",
+                                    f"Lab: {obs.get('name', '')} = {val} ({op} {thresh})",
+                                    rule["reason"].format(value=val),
+                                ],
+                                "evidence_count": 3,
+                                "upgrade_from": coded_code,
+                            })
+                    except (ValueError, TypeError):
+                        pass
+            elif "check_coded" in rule:
+                prefix = rule["check_coded"]
+                has_both = any(c.startswith(prefix) for c in coded)
+                if has_both and rule["upgrade_to"] not in coded:
+                    upgrades.append({
+                        "tier": "COMBINATION_CODE",
+                        "icd10_code": rule["upgrade_to"],
+                        "condition_name": rule["upgrade_name"],
+                        "evidence_sources": [
+                            f"Combination code: {coded_code} + {prefix} both coded separately",
+                            rule["reason"],
+                        ],
+                        "evidence_count": 2,
+                        "upgrade_from": coded_code,
+                    })
+
+    # Check E11+N18 combo
+    has_dm = any(c.startswith("E11") for c in coded)
+    has_ckd = any(c.startswith("N18") for c in coded)
+    if has_dm and has_ckd and "E11.22" not in coded:
+        upgrades.append({
+            "tier": "COMBINATION_CODE",
+            "icd10_code": "E11.22",
+            "condition_name": "Type 2 DM with diabetic CKD",
+            "evidence_sources": [
+                "Combination: E11.x and N18.x both present — E11.22 required per ICD-10 guidelines",
+            ],
+            "evidence_count": 2,
+        })
+
+    return upgrades
+
+
+def _assess_meat(gap: Dict, profile: Dict) -> Dict:
+    """Assess MEAT criteria for a gap.
+    M = Monitoring (labs ordered/reviewed for this condition)
+    E = Evaluation (encounter where condition was discussed)
+    A = Assessment (provider documented the condition in notes)
+    T = Treatment (medication prescribed for this condition)"""
+    condition = gap.get("condition_name", "").lower()
+    icd10 = gap.get("icd10_code", "")
+    icd10_prefix = icd10[:3] if icd10 else ""
+
+    meat = {"monitoring": False, "evaluation": False, "assessment": False, "treatment": False}
+
+    # ── M: Monitoring — check if relevant lab was ordered ──
+    # Lab-based gaps automatically have monitoring
+    if gap.get("tier") == "TIER_1_STRUCTURED" or gap.get("lab_value") is not None:
+        meat["monitoring"] = True
+    else:
+        # Check if any observation relates to this condition via LOINC mapping
+        for obs in profile.get("observations", []):
+            loinc = obs.get("loinc", "")
+            if loinc in LOINC_ICD10_MAP:
+                mapping = LOINC_ICD10_MAP[loinc]
+                for thresh in mapping.get("thresholds", []):
+                    if thresh.get("icd10", "").startswith(icd10_prefix):
+                        meat["monitoring"] = True
+                        break
+
+    # ── E: Evaluation — encounter exists in measurement period ──
     if profile.get("encounters"):
         meat["evaluation"] = True
 
-    # A — Assessment: condition mentioned in notes
+    # ── A: Assessment — condition mentioned in Assessment/Plan section ──
     all_notes = " ".join(n.get("text", "") for n in profile.get("clinical_notes", []))
-    if condition.split()[0].lower() in all_notes.lower():
-        meat["assessment"] = True
+    # Check for condition name in A/P section specifically
+    condition_words = [w for w in condition.split() if len(w) > 3]
+    for word in condition_words[:3]:
+        # Find the word in text
+        for m in re.finditer(re.escape(word), all_notes, re.IGNORECASE):
+            section = detect_section(all_notes, m.start())
+            if section == "assessment_plan":
+                meat["assessment"] = True
+                break
+        if meat["assessment"]:
+            break
+    # Fallback — any mention counts if no section detected
+    if not meat["assessment"] and condition_words:
+        if any(w.lower() in all_notes.lower() for w in condition_words[:2]):
+            meat["assessment"] = True
 
-    # T — Treatment: relevant medication prescribed
-    for med in profile.get("medications", []):
-        med_name = med.get("name", "").lower()
-        # Check phenotype rules for medication markers
-        for rule in PHENOTYPE_RULES.values():
-            if rule["icd10"].startswith(icd10[:3]):
-                for marker in rule.get("medication_markers", []):
-                    if marker in med_name:
-                        meat["treatment"] = True
-                        break
+    # ── T: Treatment — relevant medication from phenotype rules ──
+    med_names = [m.get("name", "").lower() for m in profile.get("medications", [])]
+    for rule in PHENOTYPE_RULES.values():
+        if rule["icd10"].startswith(icd10_prefix):
+            for marker in rule.get("medication_markers", []):
+                if any(marker in mn for mn in med_names):
+                    meat["treatment"] = True
+                    break
+            if meat["treatment"]:
+                break
 
     return meat
