@@ -1,0 +1,4 @@
+
+# Add this at the start of tool_detect_gaps function:
+log.info(f"DEBUG - Context received: {ctx}")
+log.info(f"DEBUG - Arguments received: {arguments}")

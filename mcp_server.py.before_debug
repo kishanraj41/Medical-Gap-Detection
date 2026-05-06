@@ -15,14 +15,7 @@ from typing import Any
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 
-# Cloud Run compatible logging - outputs to stdout
-import sys
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
-    stream=sys.stdout,
-    force=True  # Override any existing config
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
 log = logging.getLogger("ctrl-alt-heal")
 
 app = FastAPI(
@@ -309,11 +302,6 @@ TOOL_DEFINITIONS = [
 async def call_tool(tool_name: str, arguments: dict, ctx: dict) -> Any:
     """Route tool calls to implementations."""
     validate_sharp_context(ctx)
-    
-    # LOG THE ACTUAL FHIR URL FROM PROMPT OPINION
-    log.info(f"🔍 FHIR Server URL from Prompt Opinion: {ctx.get('fhir_server_url')}")
-    log.info(f"🔍 Access Token present: {bool(ctx.get('access_token'))}")
-    log.info(f"🔍 Patient ID from context: {ctx.get('patient_id')}")
 
     from fhir_adapter import FHIRClient, FHIRPatientExtractor
     client = FHIRClient(ctx["fhir_server_url"], ctx.get("access_token", ""))
@@ -335,13 +323,8 @@ async def call_tool(tool_name: str, arguments: dict, ctx: dict) -> Any:
 
 async def tool_detect_gaps(extractor, arguments: dict, ctx: dict) -> dict:
     """Run the full gap detection pipeline on a patient."""
-    # DEBUG LOGGING
-    log.info(f"🔍 DEBUG - Context received: {ctx}")
-    log.info(f"🔍 DEBUG - Arguments received: {arguments}")
-    
     # Use patient_id from arguments OR from SHARP context headers
     patient_id = arguments.get("patient_id") or ctx.get("patient_id", "")
-    log.info(f"🔍 DEBUG - Resolved patient_id: {patient_id}")
     
     if not patient_id:
         return {
@@ -530,66 +513,7 @@ async def health():
     return {"status": "ok", "service": "ctrl-alt-heal", "version": "1.0.0"}
 
 
-
-
-@app.get("/debug/patient/{patient_id}")
-async def debug_patient(patient_id: str, request: Request):
-    """Debug endpoint to see raw patient data"""
-    from fhir_adapter import FHIRClient, FHIRPatientExtractor
-    
-    ctx = get_sharp_context(request)
-    fhir_url = ctx.get("fhir_server_url", "")
-    
-    if not fhir_url:
-        return {"error": "No FHIR server URL in context", "patient_id": patient_id}
-    
-    client = FHIRClient(fhir_url, ctx.get("access_token", ""))
-    extractor = FHIRPatientExtractor(client)
-    
-    try:
-        demographics = extractor.get_patient_demographics(patient_id)
-        profile = extractor.extract_patient(patient_id)
-        
-        return {
-            "patient_id": patient_id,
-            "fhir_server": fhir_url,
-            "demographics": demographics,
-            "data_counts": {
-                "notes": len(profile.get("clinical_notes", [])),
-                "labs": len(profile.get("observations", [])),
-                "meds": len(profile.get("medications", [])),
-                "conditions": len(profile.get("conditions", [])),
-            }
-        }
-    except Exception as e:
-        return {"error": str(e), "patient_id": patient_id, "fhir_server": fhir_url}
-
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
-@app.get("/debug/patient/{patient_id}")
-async def debug_patient(patient_id: str):
-    """Debug endpoint to see raw patient data from Prompt Opinion FHIR"""
-    from fhir_adapter import FHIRClient, FHIRPatientExtractor
-    
-    # Use Prompt Opinion's internal FHIR endpoint
-    # They likely have their own FHIR server
-    fhir_url = "https://fhir.promptopinion.ai/baseR4"  # Guess - might be different
-    
-    client = FHIRClient(fhir_url, "")
-    extractor = FHIRPatientExtractor(client)
-    
-    try:
-        demographics = extractor.get_patient_demographics(patient_id)
-        return {
-            "patient_id": patient_id,
-            "demographics": demographics,
-            "raw_test": "checking what Prompt Opinion stores"
-        }
-    except Exception as e:
-        return {
-            "error": str(e),
-            "patient_id": patient_id
-        }
