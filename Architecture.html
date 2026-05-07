@@ -97,7 +97,7 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <radialGradient id="g-pink"><stop offset="0%" stop-color="#ff64c8" stop-opacity="0.95"/><stop offset="100%" stop-color="#ff64c8" stop-opacity="0"/></radialGradient>
 </defs>
 
-<!-- LEFT COLUMN: INPUT FLOW -->
+<!-- LEFT COLUMN -->
 <g style="color:#00ff88;">
   <rect class="box input pulse" x="30" y="60" width="240" height="90"/>
   <text x="150" y="92" text-anchor="middle" font-size="22">👨‍⚕️</text>
@@ -166,7 +166,6 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <text x="590" y="388" text-anchor="middle" class="title">DETECTION PIPELINE — 33 AGENTS · 4 TIERS</text>
   <text x="590" y="405" text-anchor="middle" class="subtitle">CPU/GPU dual mode · ~2 sec end-to-end · multi-evidence corroboration</text>
 
-  <!-- TIER 1 -->
   <rect class="box tier" x="330" y="420" width="520" height="80" stroke="rgba(255,200,100,0.55)"/>
   <text x="345" y="439" class="label-tier">TIER 1 — STRUCTURED LAB EVIDENCE</text>
   <text x="840" y="439" text-anchor="end" class="subtitle">deterministic · auditable</text>
@@ -174,7 +173,6 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <text x="345" y="473" class="code-mono">HbA1c≥6.5 → E11.65 · eGFR&lt;60 → N18.3 · BNP&gt;400 → I50.9</text>
   <text x="345" y="490" class="code-mono">LDL≥190 → E78.0 · TSH&gt;4.5 → E03.9 · Hgb&lt;12 → D64.9</text>
 
-  <!-- TIER 2 -->
   <rect class="box tier" x="330" y="510" width="520" height="80" stroke="rgba(0,210,255,0.55)"/>
   <text x="345" y="529" class="label-tier" style="fill:rgba(0,210,255,0.95)">TIER 2 — PHENOTYPE CORROBORATION</text>
   <text x="840" y="529" text-anchor="end" class="subtitle">12 conditions · PheKB / OHDSI</text>
@@ -182,7 +180,6 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <text x="345" y="563" class="code-mono">Diabetes (15 RxNorm meds + HbA1c + note patterns)</text>
   <text x="345" y="580" class="code-mono">CKD · CHF · COPD · Depression · Hypothyroid · Obesity ...</text>
 
-  <!-- TIER 3 -->
   <rect class="box tier" x="330" y="600" width="520" height="95" stroke="rgba(0,255,136,0.55)"/>
   <text x="345" y="619" class="label-tier" style="fill:rgba(0,255,136,0.95)">TIER 3 — CLINICAL NER (GPU/CPU dual)</text>
   <text x="840" y="619" text-anchor="end" class="subtitle">F1 0.91 (GPU) · 0.85 (CPU)</text>
@@ -191,7 +188,6 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <text x="345" y="670" class="code-mono">+ Negation detection: NegSpacy + ConText algorithm</text>
   <text x="345" y="687" class="code-mono">+ Screening filter: blocks "screening for X", "rule out", PHQ-9</text>
 
-  <!-- TIER 4 -->
   <rect class="box tier" x="330" y="705" width="520" height="78" fill="rgba(60, 20, 50, 0.85)" stroke="rgba(255,150,220,0.95)" stroke-width="2.5"/>
   <text x="345" y="724" class="label-tier" style="fill:rgba(255,150,220,1)">TIER 4 — SPECIFICITY UPGRADES</text>
   <text x="840" y="724" text-anchor="end" class="subtitle" style="fill:rgba(255,180,220,0.9)">under-coded gap detection</text>
@@ -199,46 +195,40 @@ svg { width: 100vw; height: calc(100vh - 70px); display: block; }
   <text x="345" y="759" class="code-mono">E11.9 + HbA1c≥6.5 → upgrade to E11.65 (HCC 37, +$1,826/yr)</text>
   <text x="345" y="776" class="code-mono">E11.* + N18.* → combination code E11.22 · I10 + N18.* → I12.9</text>
 
-  <!-- HCC + MEAT -->
   <rect class="box tier" x="330" y="793" width="520" height="35" stroke="rgba(255,215,0,0.5)"/>
   <text x="345" y="813" class="label-tier" style="fill:rgba(255,215,0,0.95)">HCC + RAF SCORING (CMS V28) · MEAT VALIDATION (M·E·A·T)</text>
 </g>
 
-<!-- RIGHT COLUMN: KEY DESIGN CHOICES -->
+<!-- RIGHT: KEY DESIGN CHOICES -->
 <g>
   <rect class="box mcp pulse" x="910" y="60" width="760" height="280" style="color:#00d2ff;"/>
   <text x="1290" y="88" text-anchor="middle" class="title" style="font-size:16px;">KEY DESIGN CHOICES</text>
   <text x="1290" y="105" text-anchor="middle" class="subtitle">What makes our pipeline robust</text>
 
-  <!-- Choice 1: Multi-Evidence -->
   <rect class="box feature" x="930" y="120" width="365" height="80"/>
   <text x="940" y="140" class="label-tier" style="fill:rgba(0,255,136,0.95);">⚡ MULTI-EVIDENCE CROSS-VALIDATION</text>
   <text x="940" y="158" class="label" font-size="10">Same condition caught by labs + meds + notes</text>
   <text x="940" y="175" class="label" font-size="10">= high confidence, audit-defensible</text>
   <text x="940" y="192" class="subtitle">Each tier independently corroborates findings</text>
 
-  <!-- Choice 2: Specificity Upgrades -->
   <rect class="box feature" x="1305" y="120" width="365" height="80"/>
   <text x="1315" y="140" class="label-tier" style="fill:rgba(0,255,136,0.95);">⚡ SPECIFICITY UPGRADE DETECTION</text>
   <text x="1315" y="158" class="label" font-size="10">Doesn't just find missing codes —</text>
   <text x="1315" y="175" class="label" font-size="10">finds under-coded conditions too</text>
   <text x="1315" y="192" class="subtitle">Highest-revenue gap type in real coding</text>
 
-  <!-- Choice 3: MEAT -->
   <rect class="box feature" x="930" y="210" width="365" height="80"/>
   <text x="940" y="230" class="label-tier" style="fill:rgba(0,255,136,0.95);">⚡ MEAT CRITERIA VALIDATION</text>
   <text x="940" y="248" class="label" font-size="10">Monitoring · Evaluation · Assessment · Treatment</text>
   <text x="940" y="265" class="label" font-size="10">CMS-defensible evidence per gap</text>
   <text x="940" y="282" class="subtitle">The same standard auditors use</text>
 
-  <!-- Choice 4: Determinism -->
   <rect class="box feature" x="1305" y="210" width="365" height="80"/>
   <text x="1315" y="230" class="label-tier" style="fill:rgba(0,255,136,0.95);">⚡ DETERMINISTIC TIERS</text>
   <text x="1315" y="248" class="label" font-size="10">Tier 1 + Tier 2 + Tier 4: 100% reproducible</text>
   <text x="1315" y="265" class="label" font-size="10">Same input → same gaps, every time</text>
   <text x="1315" y="282" class="subtitle">Critical for audit and regulatory review</text>
 
-  <!-- Choice 5: GPU/CPU -->
   <rect class="box feature" x="930" y="300" width="730" height="35"/>
   <text x="940" y="319" class="label-tier" style="fill:rgba(0,255,136,0.95);">⚡ GPU/CPU DUAL MODE — Same code runs locally on CPU or scaled with GPU</text>
 </g>
