@@ -10,6 +10,34 @@ We're a [Path A submission](https://agents-assemble.devpost.com/) — we built t
 
 ---
 
+## Live demo
+
+Below is the actual output from running our MCP server against Margaret Whitmore — a 68-year-old multi-morbid synthetic patient — through the Prompt Opinion platform.
+
+### The question
+
+> *"What coding opportunities are we missing on Margaret Whitmore?"*
+
+### The response
+
+The agent calls our `detect_coding_gaps` tool. ~2 seconds later, it returns 10 gaps split into approved findings and review candidates, each with HCC categories, RAF-derived revenue impact, and a clinical evidence trail.
+
+![Approved gaps with HCC categories and revenue impact](./screenshots/01-gap-audit-top.png)
+
+The system caught a **specificity upgrade** — the patient is currently coded as `E11.9` (diabetes, unspecified), but with HbA1c at 8.9%, the correct code is `E11.65` (Type 2 DM with hyperglycemia). That single upgrade adds **$1,826/yr** to her risk score under CMS V28.
+
+It also identified heart failure and CKD that were documented in the progress note but never coded — backed by lab evidence (BNP 620, eGFR 42), medication evidence (furosemide, carvedilol, lisinopril), and direct quotes from the assessment and plan section.
+
+![Review candidates and additional gaps](./screenshots/02-gap-audit-middle.png)
+
+Lower-confidence findings are surfaced as **review candidates** — gaps where the evidence is suggestive but warrants clinician confirmation. Each one still includes the supporting evidence so a coder can validate quickly.
+
+![Total revenue impact summary](./screenshots/03-gap-audit-summary.png)
+
+**Total potential annual revenue impact for one patient: $6,897.** Across a Medicare Advantage panel, this scales into seven figures.
+
+---
+
 ## What you get
 
 Five tools, exposed over MCP, that any agent can pick up:
@@ -170,7 +198,7 @@ The pipeline has been tested in three ways:
 
 **MTSamples corpus (2,227 real clinical transcriptions, zero processing errors).** We ran the pipeline against the [Kaggle MTSamples dataset](https://www.kaggle.com/datasets/tboyle10/medicaltranscriptions) — real medical transcriptions across 14 specialties (internal medicine, cardiology, endocrinology, nephrology, etc.). Results: 774 of 2,227 notes (34.8%) had at least one coding gap, with $1,134,540 in projected annual revenue impact.
 
-**Live demo on Prompt Opinion.** Margaret Whitmore, a 68-year-old multi-morbid synthetic patient: 10 gaps detected in ~2 seconds, $6,897/year in projected revenue, all 4 tiers triggered, including the `E11.9 → E11.65` specificity upgrade.
+**Live demo on Prompt Opinion.** Margaret Whitmore (screenshots above): 10 gaps detected in ~2 seconds, $6,897/year in projected revenue, all 4 tiers triggered, including the `E11.9 → E11.65` specificity upgrade.
 
 ---
 
@@ -187,6 +215,7 @@ The pipeline has been tested in three ways:
 ├── test_mtsamples.py         # MTSamples corpus runner
 ├── agents/                   # 33-agent pipeline (CPU + GPU/CPU dual mode)
 ├── data/                     # LOINC ranges, phenotype rules
+├── screenshots/              # Demo screenshots from Prompt Opinion
 ├── Dockerfile
 └── requirements.txt
 ```
