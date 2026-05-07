@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ctrl+Alt+Heal — Workflow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Space Mono', monospace;
+  background: radial-gradient(ellipse at center, #0a1628 0%, #050a14 100%);
+  color: #fff; overflow: hidden;
+  width: 100vw; height: 100vh;
+}
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,210,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,210,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.container { position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+.header { text-align: center; padding: 16px 0 6px 0; z-index: 10; }
+.header h1 {
+  font-family: 'Orbitron', sans-serif; font-weight: 900;
+  font-size: 28px; letter-spacing: 3px;
+  background: linear-gradient(90deg, #00d2ff, #00ff88, #ff64c8, #00d2ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient 4s linear infinite;
+}
+.header p { font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
+@keyframes gradient { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+svg { width: 100vw; height: calc(100vh - 70px); display: block; }
+
+.step {
+  fill: rgba(15, 30, 50, 0.85);
+  stroke-width: 2.5;
+  rx: 14;
+  filter: drop-shadow(0 0 0 transparent);
+  transition: filter 0.5s;
+}
+.step.active {
+  filter: drop-shadow(0 0 18px currentColor);
+}
+.step-num {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+}
+.step-title { fill: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 14px; }
+.step-desc { fill: rgba(255,255,255,0.65); font-size: 11px; }
+.step-meta { font-size: 10px; }
+.code-line { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: rgba(0,255,136,0.85); }
+
+.arrow {
+  stroke: rgba(0,210,255,0.2);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-dasharray: 6 4;
+}
+.arrow.active {
+  stroke: rgba(0,210,255,0.95);
+  animation: dash 0.5s linear infinite;
+}
+@keyframes dash { to { stroke-dashoffset: -10; } }
+
+.outcome { fill: rgba(20, 50, 30, 0.85); stroke: rgba(0,255,136,0.6); stroke-width: 3; rx: 14; }
+.outcome-title { fill: #00ff88; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px; }
+
+.legend {
+  position: absolute; bottom: 18px; left: 18px;
+  background: rgba(10, 22, 40, 0.85);
+  border: 1px solid rgba(0,210,255,0.2);
+  border-radius: 6px; padding: 10px 14px;
+  font-size: 11px; color: rgba(255,255,255,0.6);
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container">
+<div class="header">
+  <h1>CTRL+ALT+HEAL — Detection Workflow</h1>
+  <p>From Clinician Question to Audit-Ready Coding Opportunities · ~2 second pipeline</p>
+</div>
+
+<svg id="workflow" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid meet">
+<defs>
+  <marker id="warr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M2,1 L8,5 L2,9" fill="rgba(0,210,255,0.95)"/>
+  </marker>
+</defs>
+
+<!-- ═════════ ROW 1: Steps 1-4 (left to right) ═════════ -->
+<!-- Step 1: Clinician Query -->
+<g class="step-group" id="g1">
+  <rect class="step" x="60" y="80" width="280" height="140" stroke="#00ff88" style="color:#00ff88;"/>
+  <circle cx="100" cy="120" r="22" fill="rgba(0,255,136,0.2)" stroke="#00ff88" stroke-width="2"/>
+  <text x="100" y="128" text-anchor="middle" class="step-num" fill="#00ff88">1</text>
+  <text x="135" y="115" class="step-title">CLINICIAN QUERY</text>
+  <text x="135" y="135" class="step-desc">Natural language input</text>
+  <rect x="80" y="155" width="240" height="50" fill="rgba(0,0,0,0.4)" stroke="rgba(0,255,136,0.3)" rx="4"/>
+  <text x="92" y="172" fill="rgba(0,255,136,0.85)" class="step-meta" font-family="monospace">"Audit gaps for patient</text>
+  <text x="92" y="186" fill="rgba(0,255,136,0.85)" class="step-meta" font-family="monospace">Margaret Whitmore"</text>
+  <text x="92" y="200" fill="rgba(255,255,255,0.4)" class="step-meta">↳ via Prompt Opinion UI</text>
+</g>
+
+<!-- Arrow 1→2 -->
+<path id="arr1" class="arrow" d="M 340 150 L 405 150" marker-end="url(#warr)"/>
+
+<!-- Step 2: Agent Routing -->
+<g class="step-group" id="g2">
+  <rect class="step" x="405" y="80" width="280" height="140" stroke="#ffc850" style="color:#ffc850;"/>
+  <circle cx="445" cy="120" r="22" fill="rgba(255,200,80,0.2)" stroke="#ffc850" stroke-width="2"/>
+  <text x="445" y="128" text-anchor="middle" class="step-num" fill="#ffc850">2</text>
+  <text x="480" y="115" class="step-title">AGENT ROUTING</text>
+  <text x="480" y="135" class="step-desc">Prompt Opinion platform</text>
+  <text x="425" y="165" fill="rgba(255,200,80,0.85)" class="step-meta">▸ LLM identifies intent</text>
+  <text x="425" y="180" fill="rgba(255,200,80,0.85)" class="step-meta">▸ Selects detect_coding_gaps tool</text>
+  <text x="425" y="195" fill="rgba(255,200,80,0.85)" class="step-meta">▸ Resolves patient ID</text>
+  <text x="425" y="210" fill="rgba(255,255,255,0.4)" class="step-meta">↳ Builds SHARP context</text>
+</g>
+
+<!-- Arrow 2→3 -->
+<path id="arr2" class="arrow" d="M 685 150 L 750 150" marker-end="url(#warr)"/>
+
+<!-- Step 3: MCP Tool Invocation -->
+<g class="step-group" id="g3">
+  <rect class="step" x="750" y="80" width="280" height="140" stroke="#b478ff" style="color:#b478ff;"/>
+  <circle cx="790" cy="120" r="22" fill="rgba(180,120,255,0.2)" stroke="#b478ff" stroke-width="2"/>
+  <text x="790" y="128" text-anchor="middle" class="step-num" fill="#b478ff">3</text>
+  <text x="825" y="115" class="step-title">MCP TOOL CALL</text>
+  <text x="825" y="135" class="step-desc">JSON-RPC 2.0 over HTTPS</text>
+  <text x="770" y="165" fill="rgba(180,120,255,0.85)" class="step-meta">▸ POST /mcp on Cloud Run</text>
+  <text x="770" y="180" fill="rgba(180,120,255,0.85)" class="step-meta">▸ method: tools/call</text>
+  <text x="770" y="195" fill="rgba(180,120,255,0.85)" class="step-meta">▸ SHARP headers attached</text>
+  <text x="770" y="210" fill="rgba(255,255,255,0.4)" class="step-meta">↳ X-FHIR-Server-URL · X-Patient-ID</text>
+</g>
+
+<!-- Arrow 3→4 -->
+<path id="arr3" class="arrow" d="M 1030 150 L 1095 150" marker-end="url(#warr)"/>
+
+<!-- Step 4: FHIR Data Pull -->
+<g class="step-group" id="g4">
+  <rect class="step" x="1095" y="80" width="280" height="140" stroke="#64dcff" style="color:#64dcff;"/>
+  <circle cx="1135" cy="120" r="22" fill="rgba(100,220,255,0.2)" stroke="#64dcff" stroke-width="2"/>
+  <text x="1135" y="128" text-anchor="middle" class="step-num" fill="#64dcff">4</text>
+  <text x="1170" y="115" class="step-title">FHIR DATA PULL</text>
+  <text x="1170" y="135" class="step-desc">REST queries to FHIR R4</text>
+  <text x="1115" y="165" fill="rgba(100,220,255,0.85)" class="step-meta">▸ Patient + Conditions</text>
+  <text x="1115" y="180" fill="rgba(100,220,255,0.85)" class="step-meta">▸ Observations + Medications</text>
+  <text x="1115" y="195" fill="rgba(100,220,255,0.85)" class="step-meta">▸ DocumentReference notes</text>
+  <text x="1115" y="210" fill="rgba(255,255,255,0.4)" class="step-meta">↳ Encounters + Procedures</text>
+</g>
+
+<!-- Down arrow -->
+<path id="arr4" class="arrow" d="M 1235 220 Q 1235 280 1235 320" marker-end="url(#warr)"/>
+
+<!-- ═════════ ROW 2: Steps 5-8 (right to left) ═════════ -->
+<!-- Step 5: 4-Tier Detection -->
+<g class="step-group" id="g5">
+  <rect class="step" x="1095" y="320" width="280" height="160" stroke="#ff64c8" style="color:#ff64c8;"/>
+  <circle cx="1135" cy="360" r="22" fill="rgba(255,100,200,0.2)" stroke="#ff64c8" stroke-width="2"/>
+  <text x="1135" y="368" text-anchor="middle" class="step-num" fill="#ff64c8">5</text>
+  <text x="1170" y="355" class="step-title">4-TIER DETECTION</text>
+  <text x="1170" y="375" class="step-desc">Multi-evidence pipeline</text>
+  <text x="1115" y="405" fill="rgba(255,100,200,0.95)" class="step-meta">▸ Tier 1 — LOINC labs (30+)</text>
+  <text x="1115" y="420" fill="rgba(255,100,200,0.95)" class="step-meta">▸ Tier 2 — PheKB phenotypes (12)</text>
+  <text x="1115" y="435" fill="rgba(255,100,200,0.95)" class="step-meta">▸ Tier 3 — Clinical NER + filters</text>
+  <text x="1115" y="450" fill="rgba(255,150,220,1)" class="step-meta" font-weight="700">▸ Tier 4 — Specificity upgrades</text>
+  <text x="1115" y="468" fill="rgba(255,255,255,0.4)" class="step-meta">↳ Cross-tier evidence merge</text>
+</g>
+
+<!-- Arrow 5→6 -->
+<path id="arr5" class="arrow" d="M 1095 400 L 1030 400" marker-end="url(#warr)"/>
+
+<!-- Step 6: Validation -->
+<g class="step-group" id="g6">
+  <rect class="step" x="750" y="320" width="280" height="160" stroke="#ff9966" style="color:#ff9966;"/>
+  <circle cx="790" cy="360" r="22" fill="rgba(255,153,102,0.2)" stroke="#ff9966" stroke-width="2"/>
+  <text x="790" y="368" text-anchor="middle" class="step-num" fill="#ff9966">6</text>
+  <text x="825" y="355" class="step-title">CLINICAL VALIDATION</text>
+  <text x="825" y="375" class="step-desc">MEAT criteria check</text>
+  <text x="770" y="405" fill="rgba(255,180,140,0.95)" class="step-meta">M — Monitoring (relevant labs?)</text>
+  <text x="770" y="420" fill="rgba(255,180,140,0.95)" class="step-meta">E — Evaluation (encounter?)</text>
+  <text x="770" y="435" fill="rgba(255,180,140,0.95)" class="step-meta">A — Assessment (in A/P notes?)</text>
+  <text x="770" y="450" fill="rgba(255,180,140,0.95)" class="step-meta">T — Treatment (medication?)</text>
+  <text x="770" y="468" fill="rgba(255,255,255,0.4)" class="step-meta">↳ ICD-10 family deduplication</text>
+</g>
+
+<!-- Arrow 6→7 -->
+<path id="arr6" class="arrow" d="M 750 400 L 685 400" marker-end="url(#warr)"/>
+
+<!-- Step 7: HCC + RAF Scoring -->
+<g class="step-group" id="g7">
+  <rect class="step" x="405" y="320" width="280" height="160" stroke="#ffd700" style="color:#ffd700;"/>
+  <circle cx="445" cy="360" r="22" fill="rgba(255,215,0,0.2)" stroke="#ffd700" stroke-width="2"/>
+  <text x="445" y="368" text-anchor="middle" class="step-num" fill="#ffd700">7</text>
+  <text x="480" y="355" class="step-title">HCC + RAF SCORING</text>
+  <text x="480" y="375" class="step-desc">CMS V28 risk model</text>
+  <text x="425" y="405" fill="rgba(255,220,100,0.95)" class="step-meta">▸ Map ICD-10 → HCC category</text>
+  <text x="425" y="420" fill="rgba(255,220,100,0.95)" class="step-meta">▸ RAF score lookup</text>
+  <text x="425" y="435" fill="rgba(255,220,100,0.95)" class="step-meta">▸ Annual revenue calculation</text>
+  <text x="425" y="450" fill="rgba(255,220,100,0.95)" class="step-meta">▸ Sort by financial impact</text>
+  <text x="425" y="468" fill="rgba(255,255,255,0.4)" class="step-meta">↳ E11.65 = HCC 37 = $1,826/yr</text>
+</g>
+
+<!-- Arrow 7→8 -->
+<path id="arr7" class="arrow" d="M 405 400 L 340 400" marker-end="url(#warr)"/>
+
+<!-- Step 8: Output Generation -->
+<g class="step-group" id="g8">
+  <rect class="step" x="60" y="320" width="280" height="160" stroke="#a78bfa" style="color:#a78bfa;"/>
+  <circle cx="100" cy="360" r="22" fill="rgba(167,139,250,0.2)" stroke="#a78bfa" stroke-width="2"/>
+  <text x="100" y="368" text-anchor="middle" class="step-num" fill="#a78bfa">8</text>
+  <text x="135" y="355" class="step-title">OUTPUT BUILD</text>
+  <text x="135" y="375" class="step-desc">Structured JSON response</text>
+  <text x="80" y="405" fill="rgba(167,139,250,0.95)" class="step-meta">▸ Approved gaps (high conf)</text>
+  <text x="80" y="420" fill="rgba(167,139,250,0.95)" class="step-meta">▸ Review candidates</text>
+  <text x="80" y="435" fill="rgba(167,139,250,0.95)" class="step-meta">▸ Evidence trail per gap</text>
+  <text x="80" y="450" fill="rgba(167,139,250,0.95)" class="step-meta">▸ Total revenue summary</text>
+  <text x="80" y="468" fill="rgba(255,255,255,0.4)" class="step-meta">↳ Returned via MCP response</text>
+</g>
+
+<!-- Down arrow to outcome -->
+<path id="arr8" class="arrow" d="M 200 480 Q 200 545 200 580" marker-end="url(#warr)"/>
+
+<!-- ═════════ FINAL OUTCOME ═════════ -->
+<g id="outcome">
+  <rect class="outcome" x="60" y="580" width="1315" height="140"/>
+  <text x="717" y="615" text-anchor="middle" class="outcome-title">✓ AUDIT-READY GAP REPORT — DELIVERED TO CLINICIAN</text>
+
+  <!-- Stats grid -->
+  <g font-family="Orbitron" text-anchor="middle">
+    <text x="220" y="660" fill="#00ff88" font-size="32" font-weight="900">10</text>
+    <text x="220" y="685" fill="rgba(255,255,255,0.6)" font-size="11">GAPS DETECTED</text>
+
+    <text x="450" y="660" fill="#00ff88" font-size="32" font-weight="900">$6,897</text>
+    <text x="450" y="685" fill="rgba(255,255,255,0.6)" font-size="11">ANNUAL REVENUE</text>
+
+    <text x="700" y="660" fill="#00ff88" font-size="32" font-weight="900">~2 sec</text>
+    <text x="700" y="685" fill="rgba(255,255,255,0.6)" font-size="11">PROCESSING TIME</text>
+
+    <text x="940" y="660" fill="#00ff88" font-size="32" font-weight="900">4/4</text>
+    <text x="940" y="685" fill="rgba(255,255,255,0.6)" font-size="11">TIERS TRIGGERED</text>
+
+    <text x="1200" y="660" fill="#00ff88" font-size="32" font-weight="900">100%</text>
+    <text x="1200" y="685" fill="rgba(255,255,255,0.6)" font-size="11">MEAT VALIDATED</text>
+  </g>
+
+  <text x="717" y="708" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="12">
+    ▸ E11.9 → E11.65 (specificity upgrade)  ·  ▸ Heart failure newly detected  ·  ▸ Physician query draft ready
+  </text>
+</g>
+
+</svg>
+
+<div class="legend">
+  <strong style="color:rgba(0,210,255,0.9);">▶ Auto-cycling animation</strong> · Steps activate sequentially every ~1s
+</div>
+</div>
+
+<script>
+// Animate steps sequentially
+const stepIds = ['g1','g2','g3','g4','g5','g6','g7','g8','outcome'];
+const arrowIds = ['arr1','arr2','arr3','arr4','arr5','arr6','arr7','arr8'];
+
+function setActive(idx) {
+  // Reset all
+  stepIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.querySelector('rect');
+      if (rect) rect.classList.remove('active');
+    }
+  });
+  arrowIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+
+  // Activate up through current
+  for (let i = 0; i <= idx; i++) {
+    if (stepIds[i]) {
+      const el = document.getElementById(stepIds[i]);
+      if (el) {
+        const rect = el.querySelector('rect');
+        if (rect) rect.classList.add('active');
+      }
+    }
+    if (i < arrowIds.length && arrowIds[i]) {
+      const el = document.getElementById(arrowIds[i]);
+      if (el) el.classList.add('active');
+    }
+  }
+}
+
+let current = 0;
+setActive(0);
+setInterval(() => {
+  current = (current + 1) % (stepIds.length + 2);
+  if (current < stepIds.length) {
+    setActive(current);
+  } else if (current === stepIds.length) {
+    setActive(stepIds.length - 1);
+  } else {
+    setActive(0);
+    current = 0;
+  }
+}, 1100);
+</script>
+</body>
+</html>
