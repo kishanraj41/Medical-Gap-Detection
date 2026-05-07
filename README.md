@@ -12,7 +12,7 @@ We're a [Path A submission](https://agents-assemble.devpost.com/) — we built t
 
 ## Live demo
 
-Below is the actual output from running our MCP server against Margaret Whitmore — a 68-year-old multi-morbid synthetic patient — through the Prompt Opinion platform.
+Below is the actual output from running our MCP server against Margaret Whitmore, a 68-year-old multi-morbid synthetic patient, through the Prompt Opinion platform.
 
 ### The question
 
@@ -58,13 +58,13 @@ Live at: `https://ctrl-alt-heal-717323347388.us-central1.run.app/mcp`
 
 The pipeline runs in four tiers. Each tier is independent and uses different evidence — when the same gap shows up in multiple tiers, confidence goes up.
 
-**Tier 1 — Structured lab evidence.** 30+ LOINC codes mapped to ICD-10 thresholds drawn from KDIGO, AHA, ATA, and ATP-III guidelines. HbA1c ≥ 6.5 maps to `E11.65`. eGFR < 60 maps to `N18.3`. BNP > 400 maps to `I50.9`. Deterministic. Auditable.
+**Tier 1 : Structured lab evidence.** 30+ LOINC codes mapped to ICD-10 thresholds drawn from KDIGO, AHA, ATA, and ATP-III guidelines. HbA1c ≥ 6.5 maps to `E11.65`. eGFR < 60 maps to `N18.3`. BNP > 400 maps to `I50.9`. Deterministic. Auditable.
 
-**Tier 2 — Phenotype corroboration.** PheKB and OHDSI-style rules covering 12 chronic conditions. Each condition requires evidence from at least two of three sources: medications (mapped to RxNorm), labs (mapped to LOINC), and clinical notes (mapped to text patterns). A patient on metformin + Lisinopril whose chart mentions "Type 2 diabetes" but has no `E11.x` code is a strong gap.
+**Tier 2 : Phenotype corroboration.** PheKB and OHDSI-style rules covering 12 chronic conditions. Each condition requires evidence from at least two of three sources: medications (mapped to RxNorm), labs (mapped to LOINC), and clinical notes (mapped to text patterns). A patient on metformin + Lisinopril whose chart mentions "Type 2 diabetes" but has no `E11.x` code is a strong gap.
 
-**Tier 3 — Clinical NER.** Reads the unstructured text. Runs ClinicalBERT (`d4data/biomedical-ner-all`) when GPU is available; falls back to a 23-pattern regex matcher on CPU. Layered on top: section detection (HPI vs. Assessment/Plan), negation handling via NegSpacy + ConText, and a screening-context filter to keep "screening for depression" from being flagged as MDD.
+**Tier 3 : Clinical NER.** Reads the unstructured text. Runs ClinicalBERT (`d4data/biomedical-ner-all`) when GPU is available; falls back to a 23-pattern regex matcher on CPU. Layered on top: section detection (HPI vs. Assessment/Plan), negation handling via NegSpacy + ConText, and a screening-context filter to keep "screening for depression" from being flagged as MDD.
 
-**Tier 4 — Specificity upgrades.** Catches a different gap class: when an existing code should be more specific. `E11.9` coded + HbA1c ≥ 6.5% in labs → upgrade to `E11.65`. Patient has both `E11.x` and `N18.x` coded separately → combination code `E11.22` is required by ICD-10 guidelines. This is often where the most revenue lives in real coding workflows.
+**Tier 4 : Specificity upgrades.** Catches a different gap class: when an existing code should be more specific. `E11.9` coded + HbA1c ≥ 6.5% in labs → upgrade to `E11.65`. Patient has both `E11.x` and `N18.x` coded separately → combination code `E11.22` is required by ICD-10 guidelines. This is often where the most revenue lives in real coding workflows.
 
 After detection, every candidate gets scored against CMS V28 HCC categories for revenue impact and validated against MEAT criteria for audit defensibility.
 
@@ -76,7 +76,7 @@ The server implements the [SHARP-on-MCP](https://www.sharponmcp.com/) extension 
 
 - The `initialize` response advertises `fhir_context_required: true` under capabilities
 - Tool calls accept three headers: `X-FHIR-Server-URL`, `X-FHIR-Access-Token`, `X-Patient-ID`
-- The server uses those headers to authenticate against any FHIR R4 endpoint — Prompt Opinion's hosted FHIR, HAPI, or a real EHR
+- The server uses those headers to authenticate against any FHIR R4 endpoint, Prompt Opinion's hosted FHIR, HAPI, or a real EHR
 
 The Prompt Opinion platform handles credential bridging into SHARP context. We just consume the headers and use them.
 
